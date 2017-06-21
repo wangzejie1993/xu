@@ -27,7 +27,22 @@ spring:
       test-on-borrow: false
       test-on-return: false
       pool-prepared-statements: false
-
+  # REDIS (RedisProperties)
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    pool:
+      # 连接池最大连接数（使用负值表示没有限制）
+      max-active: 8
+      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+      max-wait: -1
+      # 连接池中的最大空闲连接
+      max-idle: 8
+      # 连接池中的最小空闲连接
+      min-idle: 0
+    timeout: 0
 # mybatis
 mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml
@@ -38,7 +53,7 @@ mybatis-plus:
     #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
     field-strategy: 2
     #驼峰下划线转换
-    db-column-underline: true
+    db-column-underline: false
     #刷新mapper 调试神器
     refresh-mapper: true
     #数据库大写下划线转换
@@ -57,5 +72,6 @@ mybatis-plus:
     cache-enabled: false
 #logging DEBUG < INFO < WARN < ERROR < FATAL
 logging:
-  level: WARN
+  level:
+    root: INFO
   file: ./logs/app-logging.log
