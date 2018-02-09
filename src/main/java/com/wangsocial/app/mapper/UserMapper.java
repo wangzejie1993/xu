@@ -18,5 +18,8 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("select test_id as id, name, age, test_type from user")
     public List<User> selectListBySQL();
+    
+    @Select("select test_id as id, name, age, test_type from user")
+    public List<User> selectListById();
 
 }
