@@ -18,4 +18,20 @@ public class TempComtroller {
 	public String getindex1() {
 		return "index1";
 	}
+	@RequestMapping(value="/Node/index")
+	public String getindex3() {
+		return "Node/index";
+	}
+	@RequestMapping(value="/Public/login")
+	public String getindex4() {
+		return "Public/login";
+	}
+	@RequestMapping(value="/Role/index")
+	public String getindex5() {
+		return "Role/index";
+	}
+	@RequestMapping(value="/User/index")
+	public String getindex6() {
+		return "User/index";
+	}
 }
