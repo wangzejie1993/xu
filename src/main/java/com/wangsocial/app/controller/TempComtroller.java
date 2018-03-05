@@ -1,7 +1,17 @@
 package com.wangsocial.app.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 @Controller
 public class TempComtroller {
@@ -33,5 +43,30 @@ public class TempComtroller {
 	@RequestMapping(value="/User/index")
 	public String getindex6() {
 		return "User/index";
+	}
+	@RequestMapping(value="/Order/index")
+	public String getindex7() {
+		return "Order/index";
+	}
+	@RequestMapping(value="/Customer/index")
+	public String getindex8() {
+		return "Customer/index";
+	}
+	/**
+	 * get方法请求参数
+	 * @return
+	 */
+	@RequestMapping(value="/Order/search",method=RequestMethod.GET)
+	public ModelAndView  getindex9(int limit, int offset,String searchall) {
+		ModelAndView mode = new ModelAndView("/Order/index");
+		System.out.println("hello world"+limit+"分页"+offset);
+		Map<Object, Object> map = new HashMap<>();
+		map.put("ID", "1");
+		map.put("Name", "jack");
+		map.put("Status", "开启");
+		JSONObject itemJSONObj = JSONObject.parseObject(JSON.toJSONString(map));
+		mode.addObject("data", map);
+	
+		return mode;
 	}
 }

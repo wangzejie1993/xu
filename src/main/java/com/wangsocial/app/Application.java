@@ -1,5 +1,7 @@
 package com.wangsocial.app;
 
+import java.util.Arrays;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -9,8 +11,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-
-import java.util.Arrays;
 
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
@@ -40,4 +40,5 @@ public class Application extends SpringBootServletInitializer {
 
 		};
 	}
+	
 }
