@@ -1,7 +1,5 @@
 package com.wangsocial.app.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 @Controller
-public class TempComtroller {
+public class MainComtroller {
 
 	@RequestMapping(value="/test")
 	public String gettest() {
