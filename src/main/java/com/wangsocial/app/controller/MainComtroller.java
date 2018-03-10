@@ -14,6 +14,11 @@ import com.alibaba.fastjson.JSONObject;
 @Controller
 public class MainComtroller {
 
+	@RequestMapping(value="")
+	public String defaultIndex() {
+		return "index1";
+	}
+
 	@RequestMapping(value="/test")
 	public String gettest() {
 		return "test";
