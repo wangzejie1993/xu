@@ -108,6 +108,7 @@
 	      	success:function(result){
 	            if(result.ret == 1){
 	            	TureTips(result.msg);
+	            	layer.close(index);
 	            }else{
 	            	ErrTips(result.msg);
 	            }

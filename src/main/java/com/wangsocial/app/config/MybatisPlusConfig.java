@@ -78,7 +78,7 @@ public class MybatisPlusConfig {
 
 		// ID 策略 AUTO->`0`("数据库ID自增") INPUT->`1`(用户输入ID") ID_WORKER->`2`("全局唯一ID") UUID->`3`("全局唯一ID")
 
-		globalConfig.setIdType(IdType.AUTO.getKey());
+		globalConfig.setIdType(IdType.INPUT.getKey());
 		//MP 属性下划线 转 驼峰 , 如果原生配置 mc.setMapUnderscoreToCamelCase(true) 开启，该配置可以无。
 
 		//globalConfig.setDbColumnUnderline(true);
