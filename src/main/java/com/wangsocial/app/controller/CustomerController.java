@@ -29,4 +29,16 @@ public class CustomerController {
 		Map<String,Object> map = customerService.insertCustomer(customer);
 		return map;
 	}
+	
+	@RequestMapping(value="/getCustomerList",method = RequestMethod.POST)
+	public Map<String,Object> getCustomerList(){
+		Map<String,Object> map = customerService.getCustomerList();
+		return map;
+	}
+	
+	@RequestMapping(value="/deleteCustomer",method = RequestMethod.POST)
+	public Map<String,Object> deleteCustomer(Customer customer){
+		Map<String,Object> map = customerService.deleteCustomer(customer);
+		return map;
+	}
 }

@@ -19,4 +19,12 @@ public interface ICustomerService extends IService<Customer> {
 	 * @return
 	 */
 	Map<String,Object> insertCustomer(Customer customer);
+	
+	/**
+	 * 获取客户列表
+	 * @return
+	 */
+	Map<String,Object> getCustomerList();
+	
+	Map<String,Object> deleteCustomer(Customer customer);
 }

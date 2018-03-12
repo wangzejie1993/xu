@@ -7,10 +7,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
-@TableName("customer")
 public class Customer {
 
-	@TableId(value = "id")
 	private String id;
 	
 	private String name;
@@ -21,10 +19,8 @@ public class Customer {
 	
 	private String address;
 	
-	@TableField(value = "create_date")
 	private Date createDate;
 	
-	@TableField(value = "end_date")
 	private Date endDate;
 
 	public String getId() {

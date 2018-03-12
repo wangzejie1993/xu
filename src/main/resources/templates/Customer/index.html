@@ -31,44 +31,136 @@
                 padding-right: 5px;
             }
         }
+        th,td{
+			text-align:center;
+        }
+        .cus{
+        	margin: 0px 5px;
+    		background-color: orangered;
+    		border: none;
+    		color: white;
+        }
+        .cus_div1{
+            box-shadow: 0px 5px 5px rgba(0,0,0,0.1);
+    		line-height: 50px;
+    	}
+    		
+    	#cusSearchInput{
+    	    line-height: 30px;
+    		width: 255px;
+    		margin: 0px 15px;
+    		text-indent: 15px;
+    	}
 
 
     </style>
 </head>
 <body>
-<form class="form-inline definewidth m20" action="index.html" method="get">  
-    机构名称：
-    <input type="text" name="rolename" id="rolename"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
-    <button type="submit" class="btn btn-primary">查询</button>&nbsp;&nbsp; 
-    <button type="button" class="btn btn-success" id="addCustomer">新增用户</button>
-</form>
-<table class="table table-bordered table-hover definewidth m10" >
-    <thead>
-    <tr>
-        <th>用户编号</th>
-        <th>用户名称</th>
-        <th>状态</th>
-        <th>订单操作</th>
-    </tr>
-    </thead>
-	     <tr>
-            <td>5</td>
-            <td>管理员</td>
-            <td>1</td>
-            <td>
-				<a href="edit.html">下达订单</a>  
-            </td>
-        </tr></table>
-<div class="inline pull-right page">
-         10122 条记录 1/507 页  <a href='#'>下一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下5页</a> <a href='#' >最后一页</a>    </div>
+	<div class="cus_div1">
+	    <input  type="text" id="cusSearchInput" placeholder="输入客户信息进行查询" name="rolename" id="rolename"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    	<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>&nbsp;&nbsp; 
+    	<button type="button" class="btn btn-success" id="addCustomer">新增用户</button>
+	</div>   
+	
+	<table class="table table-bordered table-hover definewidth m10" >
+		<colgroup>
+	    	<col width="10%">
+	    	<col width="10%">
+	    	<col width="20%">
+	    	<col width="25%">
+	    	<col width="15%">
+	    	<col width="18%">
+	  	</colgroup>
+    	<thead>
+    		<tr>
+		        <th>客户姓名</th>
+		        <th>客户电话</th>
+		        <th>客户公司名称</th>
+		        <th>客户公司地址</th>
+		        <th>客户添加时间</th>
+		        <th>操作</th>
+	    	</tr>
+	    </thead>
+	    <tbody id="cusTbody"></tbody>
+	</table>
+<!-- <div class="inline pull-right page">
+         </div> -->
 </body>
 </html>
 <script type="text/javascript">
 	
-	var index;
-	$("#addCustomer").click(function(){
+	$(document).ready(function(){
+		$.ajax({
+			type:"post",
+			dataType:"json",
+			url:"/customer/getCustomerList",
+			success:function(result){
+				if(result.ret == 1){
+					var cl = result.cl;
+					for(var i = 0 ;i < cl.length; i++){
+	                    var cus = cl[i];
+	                    var str = "<tr class='cus_"+cus.id+"'>";
+	                    str += "<td>"+cus.name+"</td>";
+	                    str += "<td>"+cus.phone+"</td>";
+	                    str += "<td>"+cus.company+"</td>";
+	                    str += "<td>"+cus.address+"</td>";
+	                    var time = new Date(parseInt(cus.createDate)).toLocaleString().replace(/:\d{1,2}$/,' ');
+	                    str += "<td class='cus_time'>"+time+"</td>";
+	                    str += "<td>";
+	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusDel'>删除</button>";
+	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusEdit' style='background:#2196f3'>修改</button>";
+	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus downOrder' style='background:#3f51b5'>下单</button>";
+	                    //<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>
+	                    str += "</td>";
+	                    str += "</tr>";
+	                    $("#cusTbody").append(str);
+		    		}
+				}else{
+					ErrTips(result.msg);
+				}
+			},
+			error:function(result){
+				ErrTips("服务器错误");
+			}
+		})
+	});
+	
+	$(document).on('click','.cusDel',function () {
+		var cusId = $(this).attr('value');
+		console.log(cusId);
+		layer.confirm('确认删除吗？', {
+			icon:3,
+			btn: ['确定','取消'] //按钮
+			}, function(){
+				deleteCustomer(cusId);
+			});
+	});
+	
+	function deleteCustomer(cusId){
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/customer/deleteCustomer",
+	      	data:{"id":cusId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	TureTips(result.msg);
+	            	$(".cus_"+cusId).remove();
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	}
+	
+	
+	var addIndex;
+	$('#addCustomer').on('click',function(){
 		//弹出层
-        index = layer.open({
+        addIndex = layer.open({
             type: 1,
             title: '添加客户',
             content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
@@ -84,16 +176,11 @@
 	});
 	
 	$(document).on('click','#cus_submit',function () {
-        /* var load = layer.open({
-            type: 2,
-            shadeClose: false,
-            content: '处理中'
-        }); */
+		
         var name = $("#cusConName").val();
         var phone = $("#cusConPhone").val();
         var company = $("#cusName").val();
         var address = $("#cusAddress").val();
-        //console.log(cusConName + cusConPhone + cusName + cusAddress);
         
         if($.trim(name) == "" || $.trim(phone) == "" || $.trim(company) == "" || $.trim(address) == ""){
         	ErrTips("有未填写的信息");
@@ -108,7 +195,8 @@
 	      	success:function(result){
 	            if(result.ret == 1){
 	            	TureTips(result.msg);
-	            	layer.close(index);
+	            	layer.close(addIndex);
+	            	setTimeout("location.reload()",1500);
 	            }else{
 	            	ErrTips(result.msg);
 	            }
@@ -116,7 +204,6 @@
 	          error:function(result){
 	        	  ErrTips("服务器错误");
 	          }
-	      	
 	      })
     });
 
