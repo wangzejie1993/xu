@@ -1,5 +1,6 @@
 package com.wangsocial.app.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -70,6 +71,9 @@ public class Order {
 	public void setProble_order(String proble_order) {
 		this.proble_order = proble_order;
 	}
-
+	
+	protected Serializable pkVal() {
+	      return this.id;
+	}
 	
 }

@@ -41,4 +41,29 @@ public class CustomerController {
 		Map<String,Object> map = customerService.deleteCustomer(customer);
 		return map;
 	}
+	
+	@RequestMapping(value="/getCustomerById",method = RequestMethod.POST)
+	public Map<String,Object> getCustomerById(Customer customer){
+		Map<String,Object> map = customerService.getCustomerById(customer);
+		return map;
+	}
+	
+	@RequestMapping(value="/updateCustomerById",method = RequestMethod.POST)
+	public Map<String,Object> updateCustomerById(Customer customer){
+		Map<String,Object> map = customerService.updateCustomerById(customer);
+		return map;
+	}
+	
+	@RequestMapping(value="/getCustomerListBySearch",method = RequestMethod.POST)
+	public Map<String,Object> getCustomerListBySearch(String search){
+		Map<String,Object> map = customerService.getCustomerListBySearch(search);
+		return map;
+	}
+	
+	@RequestMapping(value="/goDownOrder",method = RequestMethod.POST)
+	public Map<String,Object> goDownOrder(String id,String orderName){
+		Map<String,Object> map = customerService.goDownOrder(id, orderName);
+		return map;
+	}
+	
 }

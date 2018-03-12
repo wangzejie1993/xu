@@ -26,5 +26,38 @@ public interface ICustomerService extends IService<Customer> {
 	 */
 	Map<String,Object> getCustomerList();
 	
+	/**
+	 * 删除客户
+	 * @param customer
+	 * @return
+	 */
 	Map<String,Object> deleteCustomer(Customer customer);
+	
+	/**
+	 * 根据id获取客户信息
+	 * @param customer
+	 * @return
+	 */
+	Map<String,Object> getCustomerById(Customer customer);
+	
+	/**
+	 * 更新客户信息
+	 * @param customer
+	 * @return
+	 */
+	Map<String,Object> updateCustomerById(Customer customer);
+	
+	/**
+	 * 根据信息搜索客户
+	 * @param search
+	 * @return
+	 */
+	Map<String,Object> getCustomerListBySearch(String search);
+	
+	/**
+	 * 下达订单
+	 * @param search
+	 * @return
+	 */
+	Map<String,Object> goDownOrder(String id,String orderName);
 }
