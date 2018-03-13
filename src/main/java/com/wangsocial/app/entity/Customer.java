@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
-@TableName("customer")
+@TableName("erp_customer")
 public class Customer {
 
-	@TableId(value = "id")
+	@TableId("id")
 	private String id;
 	
 	private String name;
@@ -81,11 +81,6 @@ public class Customer {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-	}
-
-	protected Serializable pkVal() {
-	      return this.id;
-	}
-	
+	}	
 	
 }

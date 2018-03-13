@@ -15,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.wangsocial.app.entity.Customer;
+import com.wangsocial.app.entity.CustomerOrderReleation;
 import com.wangsocial.app.entity.Order;
 import com.wangsocial.app.mapper.CustomerMapper;
+import com.wangsocial.app.mapper.CustomerOrderReleationMapper;
 import com.wangsocial.app.mapper.OrderMapper;
 import com.wangsocial.app.service.ICustomerService;
 import com.wangsocial.app.util.BasePatterns;
@@ -33,6 +35,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 	
 	@Autowired
 	private OrderMapper orderMapper;
+	
+	@Autowired
+	private CustomerOrderReleationMapper coReleationMapper;
 	
 	@Override
 	public Map<String,Object> insertCustomer(Customer customer) {
@@ -211,13 +216,15 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 				map.put("msg", "查询客户失败");
 				return map;
 			}
-			Map<String,Object> releationMap = new HashMap<String, Object>();
-			releationMap.put("id", UUID.randomUUID().toString().replace("-", ""));
-			releationMap.put("cusName", cus.getName());
-			releationMap.put("cusId", cus.getId());
-			releationMap.put("ordName", orderName);
-			releationMap.put("ordId", order.getId());
-			int flag1 = baseMapper.insertCustomerOrderReleation(releationMap);
+			CustomerOrderReleation rel = new CustomerOrderReleation();
+			rel.setId(UUID.randomUUID().toString().replace("-", ""));
+			rel.setCustomerId(cus.getId());
+			rel.setCustomerName(cus.getName());
+			rel.setOrderId(order.getId());
+			rel.setOrderName(orderName);
+			rel.setStatus("1");
+			
+			int flag1 = coReleationMapper.insert(rel);
 			if(flag1 != 1){
 				map.put("ret", -1);
 				map.put("msg", "新增客户订单关系失败");

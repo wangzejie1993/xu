@@ -7,22 +7,47 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
-@TableName("order")
+@TableName("erp_order")
 public class Order {
 	@TableId(value = "id")
 	private String id;
 	
 	private String  name;
 	
-	@TableField(value = "create_date")
-	private Date  create_date;
+	@TableField("create_date")
+	private Date  createDate;
 	
-	@TableField(value = "end_date")
-	private Date  end_date;
+	@TableField("end_date")
+	private Date  endDate;
 	
-	private String  delete;
+	private String  status;
 	
-	private String proble_order;
+	@TableField("end_date")
+	private String probleOrder;
+	
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getProbleOrder() {
+		return probleOrder;
+	}
+
+	public void setProbleOrder(String probleOrder) {
+		this.probleOrder = probleOrder;
+	}
 
 	public String getId() {
 		return id;
@@ -40,40 +65,14 @@ public class Order {
 		this.name = name;
 	}
 
-	public Date getCreate_date() {
-		return create_date;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setCreate_date(Date create_date) {
-		this.create_date = create_date;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
-	public Date getEnd_date() {
-		return end_date;
-	}
 
-	public void setEnd_date(Date end_date) {
-		this.end_date = end_date;
-	}
 
-	public String getDelete() {
-		return delete;
-	}
-
-	public void setDelete(String delete) {
-		this.delete = delete;
-	}
-
-	public String getProble_order() {
-		return proble_order;
-	}
-
-	public void setProble_order(String proble_order) {
-		this.proble_order = proble_order;
-	}
-	
-	protected Serializable pkVal() {
-	      return this.id;
-	}
-	
 }

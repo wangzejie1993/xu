@@ -23,7 +23,7 @@ public interface OrderMapper extends BaseMapper<Order> {
 	Integer deleteById(String id);
 
 	// 查看
-	@Select("select id, name, create_date, end_date, delete, proble_order from oder")
+	@Select("select id, name, create_date as createDate, end_date as endDate, status, proble_order as probleOrder from erp_order")
 	public List<Order> selectAll();
 
 	public Order selectById(String id);

@@ -18,8 +18,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 	@Override
 	public Map<String, Object> addOrder(Order order) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (StringUtils.isBlank(order.getName()) || StringUtils.isBlank(order.getProble_order())
-				|| StringUtils.isBlank(order.getDelete())) {
+		if (StringUtils.isBlank(order.getName()) || StringUtils.isBlank(order.getProbleOrder())
+				|| StringUtils.isBlank(order.getStatus())) {
 			map.put("ret", -1);
 			map.put("msg", "有未填写的信息");
 			return map;
@@ -46,8 +46,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 	@Override
 	public Map<String, Object> updateOrder(Order order) {
 	Map<String, Object> map = new HashMap<String, Object>();
-	if (StringUtils.isBlank(order.getName()) || StringUtils.isBlank(order.getProble_order())
-			|| StringUtils.isBlank(order.getDelete())) {
+	if (StringUtils.isBlank(order.getName()) || StringUtils.isBlank(order.getProbleOrder())
+			|| StringUtils.isBlank(order.getStatus())) {
 		map.put("ret", -1);
 		map.put("msg", "有未填写的信息");
 		return map;
