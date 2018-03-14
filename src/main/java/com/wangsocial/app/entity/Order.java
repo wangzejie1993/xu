@@ -1,6 +1,5 @@
 package com.wangsocial.app.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -11,20 +10,31 @@ import com.baomidou.mybatisplus.annotations.TableName;
 public class Order {
 	@TableId(value = "id")
 	private String id;
-	
-	private String  name;
-	
+
+	private String name;
+
 	@TableField("create_date")
-	private Date  createDate;
-	
+	private Date createDate;
+
 	@TableField("end_date")
-	private Date  endDate;
-	
-	private String  status;
-	
+	private Date endDate;
+
+	private String status;
+
 	@TableField("end_date")
 	private String probleOrder;
-	
+
+	@TableField("order_process")
+	private String orderProcess;
+
+	public String getOrderProcess() {
+		return orderProcess;
+	}
+
+	public void setOrderProcess(String orderProcess) {
+		this.orderProcess = orderProcess;
+	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -72,7 +82,5 @@ public class Order {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
 
 }
