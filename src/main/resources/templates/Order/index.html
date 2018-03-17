@@ -88,14 +88,16 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
-		getOrderList();
+		var searchContent = $("#ordSearchInput").val();
+		getOrderList(searchContent);
 	});
 	
-	function getOrderList(){
+	function getOrderList(searchContent){
 		$.ajax({
 			type:"post",
 			dataType:"json",
 			url:"/order/getOrderList",
+			data:{"content":searchContent},
 			success:function(result){
 				if(result.ret == 1){
 					var ol = result.list;
@@ -110,8 +112,8 @@
 	                    str += "<td class='cus_time'>"+time+"</td>";
 	                    str += "<td>";
 	                    str += "<button value='"+order.id+"' class='btn btn-primary ord ordDel'>删除</button>";
-	                    str += "<button value='"+order.id+"' class='btn btn-primary ord ordEdit' style='background:#2196f3'>修改</button>";
-	                    str += "<button value='"+order.id+"' class='btn btn-primary ord downOrder' style='background:#3f51b5'>下单</button>";
+	                    //str += "<button value='"+order.id+"' class='btn btn-primary ord ordEdit' style='background:#2196f3'>修改</button>";
+	                    //str += "<button value='"+order.id+"' class='btn btn-primary ord downOrder' style='background:#3f51b5'>下单</button>";
 	                    //<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>
 	                    str += "</td>";
 	                    str += "</tr>";
@@ -126,6 +128,16 @@
 			}
 		})
 	};
+	
+	$("#ordSearchParams").on('click',function(){
+		var searchContent = $("#ordSearchInput").val();
+		if($.trim(searchContent) == ""){
+	   		ErrTips("搜索内容不能为空");
+	        return;
+	    }
+		getOrderList(searchContent);
+		
+	})
 	
 	$(document).on('click','#addOrder',function () {
 		layer.prompt({title: '创建订单', formType: 3}, function(orderName, index){

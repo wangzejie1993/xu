@@ -80,11 +80,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 	}
 
 	@Override
-	public Map<String, Object> selectAllOrder() {
+	public Map<String, Object> selectOrder(String content) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Order> list = new ArrayList<>();
 		try {
-			list = baseMapper.selectAll();
+			if (StringUtils.isBlank(content)) {
+				list = baseMapper.selectOrder();
+			} else {
+				list = baseMapper.selectOrderByContent(content);
+			}
+
 		} catch (Exception e) {
 			map.put("ret", -1);
 			map.put("msg", "程序出错，查询订单失败");
@@ -125,11 +130,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 			order = baseMapper.selectById(id);
 		} catch (Exception e) {
 			map.put("ret", -1);
-			map.put("msg", "程序出错，查询订单失败");
+			map.put("msg", "程序出错，获取失败");
 			return map;
 		}
-		map.put("ret", order);
-		map.put("msg", "更新成功");
+		map.put("ret", -1);
+		map.put("order", order);
+		map.put("msg", "获取成功");
 		return map;
 	}
 

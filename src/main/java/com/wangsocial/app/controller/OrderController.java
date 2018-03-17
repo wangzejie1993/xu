@@ -26,8 +26,8 @@ public class OrderController {
 	private IOrderService orderService;
 
 	@RequestMapping(value = "/getOrderList", method = RequestMethod.POST)
-	public Map<String, Object> getOrderList() {
-		Map<String, Object> map = orderService.selectAllOrder();
+	public Map<String, Object> getOrderList(String content) {
+		Map<String, Object> map = orderService.selectOrder(content);
 		return map;
 	}
 

@@ -14,62 +14,77 @@ import com.alibaba.fastjson.JSONObject;
 @Controller
 public class MainComtroller {
 
-	@RequestMapping(value="")
+	@RequestMapping(value = "")
 	public String defaultIndex() {
 		return "index1";
 	}
 
-	@RequestMapping(value="/test")
+	@RequestMapping(value = "/test")
 	public String gettest() {
 		return "test";
 	}
-	@RequestMapping(value="/index")
+
+	@RequestMapping(value = "/index")
 	public String getindex() {
 		return "index";
 	}
-	@RequestMapping(value="/index1")
+
+	@RequestMapping(value = "/index1")
 	public String getindex1() {
 		return "index1";
 	}
-	@RequestMapping(value="/Node/index")
+
+	@RequestMapping(value = "/Node/index")
 	public String getindex3() {
 		return "Node/index";
 	}
-	@RequestMapping(value="/Public/login")
+
+	@RequestMapping(value = "/Public/login")
 	public String getindex4() {
 		return "Public/login";
 	}
-	@RequestMapping(value="/Role/index")
+
+	@RequestMapping(value = "/Role/index")
 	public String getindex5() {
 		return "Role/index";
 	}
-	@RequestMapping(value="/User/index")
+
+	@RequestMapping(value = "/User/index")
 	public String getindex6() {
 		return "User/index";
 	}
-	@RequestMapping(value="/Order/index")
+
+	@RequestMapping(value = "/Order/index")
 	public String getindex7() {
 		return "Order/index";
 	}
-	@RequestMapping(value="/Customer/index")
+
+	@RequestMapping(value = "/Customer/index")
 	public String getindex8() {
 		return "Customer/index";
 	}
+
+	@RequestMapping(value = "/Rawmaterial/index")
+	public String getRawmaterialIndexPage() {
+		return "Rawmaterial/rawIndexPage";
+	}
+
 	/**
 	 * get方法请求参数
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/Order/search",method=RequestMethod.GET)
-	public ModelAndView  getindex9(int limit, int offset,String searchall) {
+	@RequestMapping(value = "/Order/search", method = RequestMethod.GET)
+	public ModelAndView getindex9(int limit, int offset, String searchall) {
 		ModelAndView mode = new ModelAndView("/Order/index");
-		System.out.println("hello world"+limit+"分页"+offset);
+		System.out.println("hello world" + limit + "分页" + offset);
 		Map<Object, Object> map = new HashMap<>();
 		map.put("ID", "1");
 		map.put("Name", "jack");
 		map.put("Status", "开启");
 		JSONObject itemJSONObj = JSONObject.parseObject(JSON.toJSONString(map));
 		mode.addObject("data", map);
-	
+
 		return mode;
 	}
 }

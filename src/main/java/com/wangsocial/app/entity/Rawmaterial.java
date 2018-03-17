@@ -14,25 +14,35 @@ public class Rawmaterial {
 
 	private String name;
 
-	private String num;// 材料数量
+	private String num;
 
-	private String dutyer;// 负责人
+	private String dutyer;
 
-	private String surplus;//剩余数量
-	
-	private String outNum;//出货数量
-	
-	private String purchaseNum;//购货次数
-	
-	private String shipmentNum;//出货次数
+	private String surplus;
+
+	private String outnum;
+
+	@TableField("purchase_num")
+	private String purchaseNum;
+
+	@TableField("shipment_num")
+	private String shipmentNum;
 
 	@TableField("create_date")
 	private Date createDate;
 
 	@TableField("end_date")
 	private Date endDate;
-	
+
 	private String status;
+
+	public String getNum() {
+		return num;
+	}
+
+	public void setNum(String num) {
+		this.num = num;
+	}
 
 	public String getId() {
 		return id;
@@ -48,14 +58,6 @@ public class Rawmaterial {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getNum() {
-		return num;
-	}
-
-	public void setNum(String num) {
-		this.num = num;
 	}
 
 	public String getDutyer() {
@@ -74,12 +76,12 @@ public class Rawmaterial {
 		this.surplus = surplus;
 	}
 
-	public String getOutNum() {
-		return outNum;
+	public String getOutnum() {
+		return outnum;
 	}
 
-	public void setOutNum(String outNum) {
-		this.outNum = outNum;
+	public void setOutnum(String outnum) {
+		this.outnum = outnum;
 	}
 
 	public String getPurchaseNum() {
@@ -121,6 +123,5 @@ public class Rawmaterial {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
+
 }
