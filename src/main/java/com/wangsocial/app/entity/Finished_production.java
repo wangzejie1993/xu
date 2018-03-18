@@ -1,6 +1,5 @@
 package com.wangsocial.app.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -12,25 +11,28 @@ public class Finished_production {
 
 	@TableId("id")
 	private String id;
-	
+
 	private String name;
-	
+
 	@TableField("add_time")
-	private Date addTime;//入库时间
-	
+	private Date addTime;// 入库时间
+
 	@TableField("out_time")
-	private Date outTime;//出库时间
-	
-	private String addNum;//入库数量
-	
-	private String outNum;//出库数量
-	
-	private String personName;//加工品入库责任人
-	
-	private String other;//其他
-	
-	private String flag;//表区分表示
-	
+	private Date outTime;// 出库时间
+
+	@TableField("add_num")
+	private String addNum;// 入库数量
+
+	@TableField("out_num")
+	private String outNum;// 出库数量
+
+	@TableField("person_name")
+	private String personName;// 加工品入库责任人
+
+	private String other;// 其他
+
+	private String flag;// 表区分表示
+
 	public String getId() {
 		return id;
 	}
@@ -103,6 +105,4 @@ public class Finished_production {
 		this.flag = flag;
 	}
 
-	
-	
 }

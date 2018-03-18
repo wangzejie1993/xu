@@ -23,7 +23,7 @@ public class Task {
 	@TableField("start_time")
 	private Date createDate;
 
-	@TableField("end_date")
+	@TableField("end_time")
 	private Date endDate;
 
 	private String finished;

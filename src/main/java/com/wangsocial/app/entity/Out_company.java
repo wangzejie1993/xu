@@ -15,27 +15,35 @@ public class Out_company {
 	
 	private String name;
 	
+	@TableField("task_name")
 	private String taskName;//任务名称
 	
+	@TableField("task_id")
 	private String taskId;//任务编号
 	
 	@TableField("task_time")
 	private Date taskTime;//任务时间
 	
+	@TableField("plan_rawmaterial")
 	private String planRawmaterial;//预计原材料使用量
 	
+	@TableField("now_rawmaterial_num")
 	private String nowRawmterialNum;//现有原材料量
 	
 	private String append;//是否需要添加
 	
+	@TableField("append_num")
 	private String appendNum;//添加数量
 	
+	@TableField("append_context")
 	private String appendContext;//添置内容
 	
 	private String surplus;//是否剩余
 	
+	@TableField("surplus_num")
 	private String surplusNum;//剩余数量
 	
+	@TableField("return_bl")
 	private String returnBl;//是否归还
 	
 	@TableField("return_time")

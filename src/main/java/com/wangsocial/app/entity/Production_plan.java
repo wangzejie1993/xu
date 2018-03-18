@@ -14,15 +14,20 @@ public class Production_plan {
 
 	private String name;
 
+	@TableField("production_name")
 	private String productionName;//工艺名称
 
+	@TableField("production_id")
 	private String productionId;//工艺编号
 
+	@TableField("rawmaterialr_name")
 	private String rawmaterialName;//原材料名称
 	
+	@TableField("rawmaterial_id")
 	private String rawmaterialId;//原材料iD
 	
-	private Date planTime;//计划时间
+	@TableField("plan_time")
+	private String planTime;//计划时间
 	
 	private String judge;//是否改为分配
 
@@ -74,11 +79,11 @@ public class Production_plan {
 		this.rawmaterialId = rawmaterialId;
 	}
 
-	public Date getPlanTime() {
+	public String getPlanTime() {
 		return planTime;
 	}
 
-	public void setPlanTime(Date planTime) {
+	public void setPlanTime(String planTime) {
 		this.planTime = planTime;
 	}
 
