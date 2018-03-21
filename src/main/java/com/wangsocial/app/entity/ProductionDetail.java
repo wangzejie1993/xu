@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 @TableName("erp_production_detail")
-public class Production_detail {
+public class ProductionDetail {
 
 	@TableId("id")
 	private String id;

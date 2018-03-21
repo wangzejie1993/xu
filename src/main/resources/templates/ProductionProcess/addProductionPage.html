@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <!-- <link rel="stylesheet" type="text/css" href="../static/Css/bootstrap.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../static/Css/bootstrap-responsive.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../static/Css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../static/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/issue.css" />
+    <script type="text/javascript" src="../static/Js/jquery.js"></script>
+    <script type="text/javascript" src="../static/Js/jquery.sorted.js"></script>
+    <script type="text/javascript" src="../static/Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../static/Js/ckform.js"></script>
+    <script type="text/javascript" src="../static/Js/common.js"></script>
+    <script type="text/javascript" src="../static/layer/layer.js"></script>
+    <script type="text/javascript" src="../static/laydate/laydate.js"></script>
+
+    <style type="text/css">
+		#pname,#num{
+		    width: 323px;
+    		height: 38px;
+		}
+		
+
+    </style>
+</head>
+<body>
+	<!-- <div class="prod_div1">
+	    <input  type="text" id="prodSearchInput" placeholder="输入工艺名称进行查询" class="abc input-default" value="">&nbsp;&nbsp;  
+    	<button type="button" id="prodSearchParams" class="btn btn-primary">查询</button>&nbsp;&nbsp; 
+    	<button type="button" class="btn btn-success" id="addProduction">新增工艺产品</button>
+	</div> -->   
+	<div class="issuebox">
+		<p>
+			工艺信息
+		</p>
+		<label>
+			<span><em>*</em>工艺名称：</span>
+			<input type="text" id="pname" placeholder="输入内容在15字以内" maxlength="25"/>
+		</label>
+		<label>
+			<span><em>*</em>加工时间：</span>
+    		<input readonly style="display:inline-block" type="text" class="layui-input" id="wtime" placeholder="加工到几号完成">
+		</label>
+		<label class="">
+			<span><em>*</em>使用材料：</span>
+      			<select id="rawInfo">
+			        <option value="0">请选择</option>
+      			</select>
+		</label>
+		<label>
+			<span><em>*</em>材料数量：</span>
+			<input type="number" id="num" maxlength="12"/>
+		</label>
+		<label class="">
+			<span><em>*</em>选择订单：</span>
+      			<select id="orders">
+			        <option value="0">请选择</option>
+      			</select>
+		</label>
+		<label>
+			<input style="cursor: pointer;" type="submit" id="subtn" value="添加工艺"/>
+		</label>
+	</div>
+	
+</body>
+</html>
+<script type="text/javascript" >
+laydate.render({
+	  elem: '#wtime', //指定元素
+	  type:'datetime'
+	  //theme:'grid'
+	});
+
+	$(document).ready(function(){
+		getRawmaterial();
+		getOrders();
+	});
+
+	var rawJson;
+	function getRawmaterial(){
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/rawmaterial/getRawmaterialList",
+	      	data:{"content":""},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	var rl = result.list;
+	            	rawJson = rl;
+	            	for(var i = 0;i < rl.length; i++){
+	            		var raw = rl[i];
+	            		$("#rawInfo").append("<option value='"+raw.id+"'>"+raw.name+"</option>");	
+	            	}
+	            	console.log(rawJson);
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	};
+	
+	function getOrders(){
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/order/getOrderList",
+	      	data:{"content":""},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	var ol = result.list;
+	            	console.log(ol);
+	            	for(var i = 0;i < ol.length; i++){
+	            		var ord = ol[i];
+	            		if(ord.orderProcess == "下达订单"){
+	            			$("#orders").append("<option value='"+ord.id+"'>"+ord.name+"</option>");	
+	            		}	
+	            	}
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	};
+	
+	$("#subtn").on('click',function(){
+		var name = $("#pname").val();
+		var wtime = $("#wtime").val();
+		var num = $("#num").val();
+		var rawName = $('#rawInfo option:selected').text();//选中的文本
+		var rawId = $('#rawInfo option:selected') .val();//选中的值
+		var orderName = $('#orders option:selected').text();//选中的文本
+		var orderId = $('#orders option:selected') .val();//选中的值
+		if($.trim(name) == "" || $.trim(wtime) == "" || $.trim(num) == "" || rawId == 0 || orderId == 0){
+			ErrTips("有未填写的信息");
+			return;
+		}
+		var timestamp = Date.parse(new Date(wtime));
+		//timestamp2 = timestamp1 / 1000;
+		var nowtime = new Date().getTime();
+		//nowtime = nowtime / 1000;
+		if(timestamp < nowtime){
+			ErrTips("加工时间不能低于当前时间");
+			return;
+		}
+		var total;
+		for(var i = 0;i < rawJson.length; i++){
+			var json = rawJson[i];
+			if(json.id == rawId){
+				total = json.surplus;
+				if(parseInt(num) > parseInt(total)){
+					ErrTips("数量已超过当前选择物料的数量，当前物料最高可用数量为：" + total);
+					return;
+				}
+			}
+		}
+		
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/productions/insertProduction",
+	      	data:{"name":name,"rawmaterialName":rawName,"rawmaterialId":rawId,"time":parseInt(timestamp),"orderId":orderId,"orderName":orderName,"num":num},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	layer.confirm('添加成功', {
+	        			icon:3,
+	        			btn: ['继续添加','工艺列表'] //按钮
+	        			}, function(){
+	        				$("#pname").val("");
+	        				$("#wtime").val("");
+	        				$("#num").val("");
+	        				$("#orders").val(0);
+	        				$("#rawInfo").val(0);
+	        			},function(){
+	        				window.history.go(-1);
+	        			});
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	})
+
+	function ErrTips(msg) {
+		layer.msg(msg,{icon:7,time:1500});
+    }
+	
+	function TureTips(msg) {
+		layer.msg(msg,{icon:1,time:1500});
+	}
+
+</script>

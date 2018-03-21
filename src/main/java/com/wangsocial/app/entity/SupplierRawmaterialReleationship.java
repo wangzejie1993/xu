@@ -7,17 +7,21 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 @TableName("erp_supplier_rawmaterial_releationship")
-public class Supplier_rawmaterial_releationship {
+public class SupplierRawmaterialReleationship {
 
 	@TableId("id")
 	private String id;
 
+	@TableField("supplier_name")
 	private String supplierName;// 供货商名称
 
+	@TableField("supplier_id")
 	private String supplierId;// 供货商id
 
+	@TableField("rawmaterial_name")
 	private String rawmaterialName;// 原材料名称
 
+	@TableField("rawmaterial_id")
 	private String rawmaterialId;// 原材料id
 
 	@TableField("create_date")

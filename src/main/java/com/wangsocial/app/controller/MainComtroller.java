@@ -69,6 +69,21 @@ public class MainComtroller {
 		return "Rawmaterial/rawIndexPage";
 	}
 
+	@RequestMapping(value = "/Supplier/index")
+	public String getSupplierIndexPage() {
+		return "Supplier/supIndexPage";
+	}
+
+	@RequestMapping(value = "/Production/index")
+	public String getProductionIndexPage() {
+		return "ProductionProcess/prodIndexPage";
+	}
+
+	@RequestMapping(value = "/Production/add")
+	public String getProductionAddPage() {
+		return "ProductionProcess/addProductionPage";
+	}
+
 	/**
 	 * get方法请求参数
 	 * 
