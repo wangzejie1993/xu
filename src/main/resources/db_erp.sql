@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2018-03-14 23:04:12
+Date: 2018-03-22 09:31:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -102,11 +102,31 @@ CREATE TABLE `erp_order` (
 -- Records of erp_order
 -- ----------------------------
 INSERT INTO `erp_order` VALUES ('19de7ec63e6e4d5ea233a9647bf92deb', '测试订单3', '2018-03-14 22:59:33', '2018-03-14 22:59:33', '1', '0', '1');
-INSERT INTO `erp_order` VALUES ('1a7c961bc52b496aaacc49843030e13f', '测试下订单', '2018-03-14 22:56:47', '2018-03-14 22:56:47', '1', '0', '1');
-INSERT INTO `erp_order` VALUES ('215dc4e9fe054dd396d290ada9005e0a', '测试订单1', '2018-03-13 21:52:53', '2018-03-14 21:39:21', '1', '0', '1');
-INSERT INTO `erp_order` VALUES ('23d07d11607c45efa5dc6e4d01a2db4d', '新增订单4', '2018-03-14 23:00:29', '2018-03-14 23:00:29', '1', '0', '1');
-INSERT INTO `erp_order` VALUES ('667efb393b4541bbb3e1f7944a0b7025', '测试订单2', '2018-03-14 22:58:40', '2018-03-14 22:58:40', '1', '0', '1');
-INSERT INTO `erp_order` VALUES ('asdasd', 'asdasd', '2018-03-14 21:44:31', '2018-03-14 21:55:56', '0', '0', '1');
+INSERT INTO `erp_order` VALUES ('1a7c961bc52b496aaacc49843030e13f', '测试下订单', '2018-03-14 22:56:47', '2018-03-21 15:17:14', '1', '0', '2');
+INSERT INTO `erp_order` VALUES ('215dc4e9fe054dd396d290ada9005e0a', '测试订单1', '2018-03-13 21:52:53', '2018-03-14 23:08:03', '0', '0', '1');
+INSERT INTO `erp_order` VALUES ('23d07d11607c45efa5dc6e4d01a2db4d', '新增订单4', '2018-03-14 23:00:29', '2018-03-21 21:47:18', '1', '0', '2');
+INSERT INTO `erp_order` VALUES ('667efb393b4541bbb3e1f7944a0b7025', '测试订单2', '2018-03-14 22:58:40', '2018-03-21 21:44:28', '1', '0', '2');
+
+-- ----------------------------
+-- Table structure for erp_order_production_releationship
+-- ----------------------------
+DROP TABLE IF EXISTS `erp_order_production_releationship`;
+CREATE TABLE `erp_order_production_releationship` (
+  `id` varchar(32) NOT NULL,
+  `order_id` varchar(32) DEFAULT NULL COMMENT '订单id',
+  `production_id` varchar(32) DEFAULT NULL COMMENT '工艺生产id',
+  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '生成时间',
+  `order_name` varchar(50) DEFAULT NULL,
+  `production_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单，生产关系，关联表';
+
+-- ----------------------------
+-- Records of erp_order_production_releationship
+-- ----------------------------
+INSERT INTO `erp_order_production_releationship` VALUES ('577f7dd100d040afad7b81e841f521fe', '667efb393b4541bbb3e1f7944a0b7025', '516a34cc1b574af8bfdd0125f49245c1', '2018-03-21 21:44:28', '测试订单2', '制定水泥工艺品');
+INSERT INTO `erp_order_production_releationship` VALUES ('5de326fdd8094f8d978ac3a2656b0b4c', '23d07d11607c45efa5dc6e4d01a2db4d', '1c2e5f5983b848a59b885316982f107f', '2018-03-21 21:47:18', '新增订单4', '水泥工艺2');
+INSERT INTO `erp_order_production_releationship` VALUES ('a893071ead6a4887bb81187a37ff7f26', '1a7c961bc52b496aaacc49843030e13f', 'fce07b3e1c7747c3bf6b4e5e2f379612', '2018-03-21 15:17:10', '测试下订单', '晚点点');
 
 -- ----------------------------
 -- Table structure for erp_out_company
@@ -194,19 +214,22 @@ DROP TABLE IF EXISTS `erp_production_process_releationship`;
 CREATE TABLE `erp_production_process_releationship` (
   `id` varchar(32) NOT NULL,
   `production_name` varchar(250) DEFAULT NULL COMMENT '生产工艺名称',
-  `production_id` varchar(250) DEFAULT NULL COMMENT '生产工艺id',
   `rawmaterial_name` varchar(250) DEFAULT NULL COMMENT '原材料名称',
   `rawmaterial_id` varchar(250) DEFAULT NULL COMMENT '原材料id',
   `num` varchar(250) DEFAULT NULL COMMENT '使用数量',
   `work_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '加工时间',
   `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` varchar(1) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='生产工艺关系表';
 
 -- ----------------------------
 -- Records of erp_production_process_releationship
 -- ----------------------------
+INSERT INTO `erp_production_process_releationship` VALUES ('1c2e5f5983b848a59b885316982f107f', '水泥工艺2', '水泥', '1869031307844de1bfd6208808cc3fd8', '134', '2018-03-23 00:00:00', '2018-03-21 21:47:18', '2018-03-21 21:47:18', '1');
+INSERT INTO `erp_production_process_releationship` VALUES ('516a34cc1b574af8bfdd0125f49245c1', '制定水泥工艺品', '水泥', '1869031307844de1bfd6208808cc3fd8', '120', '2018-03-22 00:00:00', '2018-03-21 21:44:28', '2018-03-21 21:44:28', '1');
+INSERT INTO `erp_production_process_releationship` VALUES ('fce07b3e1c7747c3bf6b4e5e2f379612', '晚点点', '水泥', '1869031307844de1bfd6208808cc3fd8', '100', '2018-03-23 00:00:00', '2018-03-21 15:16:50', '2018-03-21 15:16:50', '1');
 
 -- ----------------------------
 -- Table structure for erp_rawmaterial
@@ -218,9 +241,9 @@ CREATE TABLE `erp_rawmaterial` (
   `num` varchar(250) DEFAULT NULL COMMENT '材料数量',
   `dutyer` varchar(250) DEFAULT NULL COMMENT '负责人',
   `surplus` varchar(250) DEFAULT NULL COMMENT '剩余数量',
-  `outnum` varchar(250) DEFAULT NULL COMMENT '出货数量',
-  `purchase_num` varchar(250) DEFAULT NULL COMMENT '购货次数',
-  `shipment_num` varchar(250) DEFAULT NULL COMMENT '出货次数',
+  `outnum` varchar(250) DEFAULT '0' COMMENT '出货数量',
+  `purchase_num` varchar(250) DEFAULT '0' COMMENT '购货次数',
+  `shipment_num` varchar(250) DEFAULT '0' COMMENT '出货次数',
   `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` varchar(1) DEFAULT '1',
@@ -230,6 +253,8 @@ CREATE TABLE `erp_rawmaterial` (
 -- ----------------------------
 -- Records of erp_rawmaterial
 -- ----------------------------
+INSERT INTO `erp_rawmaterial` VALUES ('1869031307844de1bfd6208808cc3fd8', '水泥', '1000', '小王', '546', '454', '0', '4', '2018-03-17 19:39:56', '2018-03-21 21:47:18', '1');
+INSERT INTO `erp_rawmaterial` VALUES ('77334d06703a4e31aa78d455bad9de19', '测试物料', '100', '小黄', '100', '0', '0', '0', '2018-03-17 19:38:06', '2018-03-21 14:55:30', '1');
 
 -- ----------------------------
 -- Table structure for erp_supplier
@@ -249,6 +274,8 @@ CREATE TABLE `erp_supplier` (
 -- ----------------------------
 -- Records of erp_supplier
 -- ----------------------------
+INSERT INTO `erp_supplier` VALUES ('3743e9aea01a46e79b16e7c154042a9f', '花生', '来福寺贸易', '苏州市', '2018-03-18 13:46:24', '2018-03-18 13:48:05', '1');
+INSERT INTO `erp_supplier` VALUES ('47a1b32ac80347ffad7a6d9f6f15db15', '可乐', '阿里巴巴商务', '杭州市', '2018-03-18 13:47:50', '2018-03-18 13:47:50', '1');
 
 -- ----------------------------
 -- Table structure for erp_supplier_rawmaterial_releationship
