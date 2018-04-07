@@ -22,7 +22,6 @@ public class FinishedStockServiceImpl extends ServiceImpl<FinishedStockMapper, F
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (StringUtils.isBlank(production.getName())
 				|| StringUtils.isBlank(production.getAddNum())
-				|| StringUtils.isBlank(production.getOutNum())
 				|| StringUtils.isBlank(production.getPersonName())
 				|| StringUtils.isBlank(production.getOther())
 				) {

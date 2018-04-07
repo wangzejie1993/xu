@@ -84,6 +84,35 @@ public class MainComtroller {
 		return "ProductionProcess/addProductionPage";
 	}
 
+	
+	@RequestMapping(value = "/FinishedProduction/index")
+	public String getFinishedProduction() {
+		return "FinishedProduction/index";
+	}
+
+	@RequestMapping(value = "/OutCompany/index")
+	public String getOutCompany() {
+		return "OutCompany/index";
+	}
+	@RequestMapping(value = "/Print/index")
+	public String getPrint() {
+		return "Print/index";
+	}
+	@RequestMapping(value = "/ProductionPlan/index")
+	public String getProductionPlan() {
+		return "ProductionPlan/index";
+	}
+	@RequestMapping(value = "/ProductionTask/index")
+	public String getProductionTask() {
+		return "ProductionTask/index";
+	}
+
+
+	@RequestMapping(value = "/Stock/index")
+	public String getStock() {
+		return "Stock/index";
+	}
+	
 	/**
 	 * get方法请求参数
 	 * 

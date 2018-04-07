@@ -1,6 +1,7 @@
 package com.wangsocial.app.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 	public Map<String, Object> insertTask(Task task) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (StringUtils.isBlank(task.getName()) || StringUtils.isBlank(task.getContext())
-				|| StringUtils.isBlank(task.getCommiect()) || StringUtils.isBlank(task.getFinished())
+				|| StringUtils.isBlank(task.getFinished())
 				|| StringUtils.isBlank(task.getOutcompany_hep())) {
 			map.put("ret", -1);
 			map.put("msg", "有未填写的任务信息");
@@ -30,6 +31,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 		try {
 			String id = UUID.randomUUID().toString().replace("-", "");
 			task.setId(id);
+			task.setCreateDate(new Date());
+			task.setEndDate(new Date());
+			task.setCommiect("1");
 			int flag = baseMapper.insert(task);
 			if (flag != 1) {
 				map.put("ret", -1);

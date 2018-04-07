@@ -24,15 +24,7 @@ public class OutCompanyServiceImpl extends ServiceImpl<OutCompanyMapper, Out_com
 		if (StringUtils.isBlank(company.getName())
 				|| StringUtils.isBlank(company.getTaskId())
 				|| StringUtils.isBlank(company.getTaskName())
-				|| StringUtils.isBlank(company.getPlanRawmaterial())
-				|| StringUtils.isBlank(company.getNowRawmterialNum())
-				|| StringUtils.isBlank(company.getAppendContext())
-				|| StringUtils.isBlank(company.getAppend())
-				|| StringUtils.isBlank(company.getAppendNum())
-				|| StringUtils.isBlank(company.getAppendContext())
-				|| StringUtils.isBlank(company.getSurplus())
-				|| StringUtils.isBlank(company.getSurplusNum())
-				|| StringUtils.isBlank(company.getReturnBl())
+				|| StringUtils.isBlank(company.getOther())
 				) {
 			map.put("ret", -1);
 			map.put("msg", "有未填写的外协企业信息");

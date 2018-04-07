@@ -49,7 +49,11 @@ public class ProductionPlanController {
 		Map<String,Object> map = productionPlanService.selectProductionPlan();
 		return map;
 	}
-	
-	
+	//getProductionBySearch
+	@RequestMapping(value="/getProductionBySearch",method = RequestMethod.POST)
+	public Map<String,Object> getProductionBySearch(String search){
+		Map<String,Object> map = productionPlanService.selectProductionPlan(search);
+		return map;
+	}
 	
 }

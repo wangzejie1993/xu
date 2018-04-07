@@ -57,7 +57,7 @@
 </head>
 <body>
 	<div class="cus_div1">
-	    <input  type="text" id="cusSearchInput" placeholder="输入客户信息进行查询" name="rolename" id="rolename"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+	    <input  type="text" id="cusSearchInput" placeholder="输入外协信息进行查询" name="rolename" id="rolename"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
     	<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>&nbsp;&nbsp; 
     	<button type="button" class="btn btn-success" id="addCustomer">新增用户</button>
 	</div>   
@@ -73,11 +73,10 @@
 	  	</colgroup>
     	<thead>
     		<tr>
-		        <th>客户姓名</th>
-		        <th>客户电话</th>
-		        <th>客户公司名称</th>
-		        <th>客户公司地址</th>
-		        <th>客户添加时间</th>
+		        <th>公司名称</th>
+		        <th>任务编号</th>
+		        <th>任务名称</th>
+		        <th>任务时间</th>
 		        <th>操作</th>
 	    	</tr>
 	    </thead>
@@ -97,24 +96,20 @@
 		$.ajax({
 			type:"post",
 			dataType:"json",
-			url:"/customer/getCustomerList",
+			url:"/outcompany/getoutcompanyListBySearch",
 			success:function(result){
 				if(result.ret == 1){
-					var cl = result.cl;
+					var cl = result.list;
 					for(var i = 0 ;i < cl.length; i++){
 	                    var cus = cl[i];
 	                    var str = "<tr class='cus_"+cus.id+"'>";
-	                    str += "<td>"+cus.name+"</td>";
-	                    str += "<td>"+cus.phone+"</td>";
-	                    str += "<td>"+cus.company+"</td>";
-	                    str += "<td>"+cus.address+"</td>";
-	                    var time = new Date(parseInt(cus.createDate)).toLocaleString().replace(/:\d{1,2}$/,' ');
+	                    str += "<td>"+cus.taskName+"</td>";
+	                    str += "<td>"+cus.taskId+"</td>";
+	                    str += "<td>"+cus.taskTime+"</td>";
+	                    var time = new Date(parseInt(cus.taskTime)).toLocaleString().replace(/:\d{1,2}$/,' ');
 	                    str += "<td class='cus_time'>"+time+"</td>";
 	                    str += "<td>";
 	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusDel'>删除</button>";
-	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusEdit' style='background:#2196f3'>修改</button>";
-	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus downOrder' style='background:#3f51b5'>下单</button>";
-	                    //<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>
 	                    str += "</td>";
 	                    str += "</tr>";
 	                    $("#cusTbody").append(str);
@@ -128,35 +123,6 @@
 			}
 		})
 	};
-	
-	$(document).on('click','.downOrder',function () {
-		var cusId = $(this).attr('value');
-		layer.prompt({title: '创建订单', formType: 3}, function(orderName, index){
-			if($.trim(orderName) == ""){
-				ErrTips("订单名称不能为空");
-		        return;
-			}
-			
-			$.ajax({
-		      	type:"post",
-		      	dataType:"json",
-		      	url:"/customer/goDownOrder",
-		      	data:{"id":cusId,"orderName":orderName},	
-		      	success:function(result){
-		            if(result.ret == 1){
-		            	TureTips(result.msg);
-		            }else{
-		            	ErrTips(result.msg);
-		            }
-		          },
-		          error:function(result){
-		        	  ErrTips("服务器错误");
-		          }
-		      })
-			layer.close(index);
-		});
-	});
-	
 	$(document).on('click','.cusDel',function () {
 		var cusId = $(this).attr('value');
 		console.log(cusId);
@@ -172,7 +138,7 @@
 		$.ajax({
 	      	type:"post",
 	      	dataType:"json",
-	      	url:"/customer/deleteCustomer",
+	      	url:"/outcompany/deleteoutcompany",
 	      	data:{"id":cusId},	
 	      	success:function(result){
 	            if(result.ret == 1){
@@ -196,7 +162,7 @@
 		$.ajax({
 	      	type:"post",
 	      	dataType:"json",
-	      	url:"/customer/getCustomerById",
+	      	url:"/outcompany/getCustomerById",
 	      	data:{"id":cusId},	
 	      	success:function(result){
 	            if(result.ret == 1){
@@ -271,10 +237,10 @@
             type: 1,
             title: '添加客户',
             content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
-            "<span style='width:65px;display:inline-block;'>姓名：</span><input placeholder='联系人姓名' maxlength='10' id='cusConName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
-            "<span style='width:65px;display:inline-block;'>电话：</span><input placeholder='联系人电话' oninput='if(value.length>11)value=value.slice(0,11)' id='cusConPhone' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='number'/></br> " +
-            "<span style='width:65px;display:inline-block;'>公司名称：</span><input placeholder='公司名称' maxlength='25' id='cusName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
-            "<span style='width:65px;display:inline-block;'>公司地址：</span><input placeholder='公司地址' maxlength='50' id='cusAddress' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+            "<span style='width:65px;display:inline-block;'>姓名：</span><input placeholder='联系人姓名' maxlength='50' id='cusConName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+            "<span style='width:65px;display:inline-block;'>任务名称：</span><input placeholder='任务名称' maxlength='50' id='cusConPhone' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+            "<span style='width:65px;display:inline-block;'>任务编号：</span><input placeholder='任务编号' maxlength='25' id='cusName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+            "<span style='width:65px;display:inline-block;'>其他：</span><input placeholder='其他' maxlength='50' id='cusAddress' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
             "<span id='cus_submit' style='cursor: pointer;display: block;width: 80px;height: 30px;text-align: center;margin: 20px auto;background: cornflowerblue;line-height: 30px;color: white;border-radius: 5px'>确定</span>"+
             "</div>",
             anim: '1',
@@ -285,11 +251,11 @@
 	$(document).on('click','#cus_submit',function () {
 		
         var name = $("#cusConName").val();
-        var phone = $("#cusConPhone").val();
-        var company = $("#cusName").val();
-        var address = $("#cusAddress").val();
+        var taskName = $("#cusConPhone").val();
+        var taskId = $("#cusName").val();
+        var other = $("#cusAddress").val();
         
-        if($.trim(name) == "" || $.trim(phone) == "" || $.trim(company) == "" || $.trim(address) == ""){
+        if($.trim(name) == "" || $.trim(taskName) == "" || $.trim(taskId) == "" || $.trim(other) == ""){
         	ErrTips("有未填写的信息");
             return;
         }
@@ -297,8 +263,8 @@
         $.ajax({
 	      	type:"post",
 	      	dataType:"json",
-	      	url:"/customer/insertCustomer",
-	      	data:{"name":name,"phone":phone,"company":company,"address":address},	
+	      	url:"/outcompany/insertoutcompany",
+	      	data:{"name":name,"taskName":taskName,"taskId":taskId,"other":other},	
 	      	success:function(result){
 	            if(result.ret == 1){
 	            	TureTips(result.msg);
@@ -326,7 +292,7 @@
 		$.ajax({
 			type:"post",
 			dataType:"json",
-			url:"/customer/getCustomerListBySearch",
+			url:"/outcompany/getoutcompanyListBySearch",
 			data:{"search":search},
 			success:function(result){
 				if(result.ret == 1){
@@ -335,17 +301,13 @@
 					for(var i = 0 ;i < cl.length; i++){
 	                    var cus = cl[i];
 	                    var str = "<tr class='cus_"+cus.id+"'>";
-	                    str += "<td>"+cus.name+"</td>";
-	                    str += "<td>"+cus.phone+"</td>";
-	                    str += "<td>"+cus.company+"</td>";
-	                    str += "<td>"+cus.address+"</td>";
-	                    var time = new Date(parseInt(cus.createDate)).toLocaleString().replace(/:\d{1,2}$/,' ');
+	                    str += "<td>"+cus.taskName+"</td>";
+	                    str += "<td>"+cus.taskId+"</td>";
+	                    str += "<td>"+cus.taskTime+"</td>";
+	                    var time = new Date(parseInt(cus.taskTime)).toLocaleString().replace(/:\d{1,2}$/,' ');
 	                    str += "<td class='cus_time'>"+time+"</td>";
 	                    str += "<td>";
 	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusDel'>删除</button>";
-	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusEdit' style='background:#2196f3'>修改</button>";
-	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus downOrder' style='background:#3f51b5'>下单</button>";
-	                    //<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>
 	                    str += "</td>";
 	                    str += "</tr>";
 	                    $("#cusTbody").append(str);

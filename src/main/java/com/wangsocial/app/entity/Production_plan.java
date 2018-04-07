@@ -12,6 +12,7 @@ public class Production_plan {
 	@TableId("id")
 	private String id;
 
+	@TableField("name")
 	private String name;
 
 	@TableField("production_name")

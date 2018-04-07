@@ -22,12 +22,10 @@ public class ProductionPlanService extends ServiceImpl<ProductionPlanMapper, Pro
 	public Map<String, Object> insertProductionPlan(Production_plan plan) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (StringUtils.isBlank(plan.getName())
-				|| StringUtils.isBlank(plan.getProductionId())
 				|| StringUtils.isBlank(plan.getProductionName())
-				|| StringUtils.isBlank(plan.getRawmaterialId())
 				|| StringUtils.isBlank(plan.getRawmaterialName())
-				|| StringUtils.isBlank(plan.getPlanTime())
-				|| StringUtils.isBlank(plan.getJudge())) {
+				|| StringUtils.isBlank(plan.getPlanTime()))
+				 {
 			map.put("ret", -1);
 			map.put("msg", "有未填写的计划信息");
 			return map;
@@ -35,6 +33,9 @@ public class ProductionPlanService extends ServiceImpl<ProductionPlanMapper, Pro
 		try {
 			String id = UUID.randomUUID().toString().replace("-", "");
 			plan.setId(id);
+			plan.setJudge("0");
+			plan.setProductionId(id);
+			plan.setRawmaterialId(id);
 			int flag = baseMapper.insert(plan);
 			if (flag != 1) {
 				map.put("ret", -1);
@@ -73,9 +74,16 @@ public class ProductionPlanService extends ServiceImpl<ProductionPlanMapper, Pro
 	}
 
 	@Override
-	public Map<String, Object> selectProductionPlan() {
+	public Map<String, Object> selectProductionPlan(String search) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Production_plan> list = new ArrayList<Production_plan>();
+		if(search!=""||null!=search){
+			list = baseMapper.getProductionPlanListByContent(search);
+			map.put("list", list);
+			map.put("ret", 1);
+			map.put("msg", "获取成功");
+			return map;
+		}else{
 		try {
 				list = baseMapper.selectList(null);
 		} catch (Exception e) {
@@ -88,6 +96,7 @@ public class ProductionPlanService extends ServiceImpl<ProductionPlanMapper, Pro
 		map.put("ret", 1);
 		map.put("msg", "获取成功");
 		return map;
+		}
 	}
 
 	@Override
@@ -112,6 +121,24 @@ public class ProductionPlanService extends ServiceImpl<ProductionPlanMapper, Pro
 		}
 		map.put("ret", 1);
 		map.put("msg", "删除成功");
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> selectProductionPlan() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Production_plan> list = new ArrayList<Production_plan>();
+		try {
+				list = baseMapper.selectList(null);
+		} catch (Exception e) {
+			map.put("ret", -1);
+			map.put("msg", "程序出错，查询生产计划失败");
+			return map;
+		}
+
+		map.put("list", list);
+		map.put("ret", 1);
+		map.put("msg", "获取成功");
 		return map;
 	}
 

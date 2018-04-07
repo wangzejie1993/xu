@@ -35,7 +35,7 @@ public class FinishedProductionController {
 		return map;
 	}
 
-	@RequestMapping(value = "/getfinishedproductionListBySearch", method = RequestMethod.GET)
+	@RequestMapping(value = "/getfinishedproductionListBySearch", method = RequestMethod.POST)
 	public Map<String, Object> getProductionPlanListBySearch() {
 		Map<String, Object> map = finishedStockService.selectFinishedStock();
 		return map;

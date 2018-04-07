@@ -43,12 +43,22 @@ public class Out_company {
 	@TableField("surplus_num")
 	private String surplusNum;//剩余数量
 	
-	@TableField("return_bl")
+	@TableField("return")
 	private String returnBl;//是否归还
 	
 	@TableField("return_time")
 	private Date returnTime;//归还时间
 	
+	private String other;
+	
+	public String getOther() {
+		return other;
+	}
+
+	public void setOther(String other) {
+		this.other = other;
+	}
+
 	public String getId() {
 		return id;
 	}

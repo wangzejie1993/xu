@@ -129,34 +129,6 @@
 		})
 	};
 	
-	$(document).on('click','.downOrder',function () {
-		var cusId = $(this).attr('value');
-		layer.prompt({title: '创建订单', formType: 3}, function(orderName, index){
-			if($.trim(orderName) == ""){
-				ErrTips("订单名称不能为空");
-		        return;
-			}
-			
-			$.ajax({
-		      	type:"post",
-		      	dataType:"json",
-		      	url:"/customer/goDownOrder",
-		      	data:{"id":cusId,"orderName":orderName},	
-		      	success:function(result){
-		            if(result.ret == 1){
-		            	TureTips(result.msg);
-		            }else{
-		            	ErrTips(result.msg);
-		            }
-		          },
-		          error:function(result){
-		        	  ErrTips("服务器错误");
-		          }
-		      })
-			layer.close(index);
-		});
-	});
-	
 	$(document).on('click','.cusDel',function () {
 		var cusId = $(this).attr('value');
 		console.log(cusId);
@@ -187,43 +159,6 @@
 	          }
 	      })
 	};
-	
-	var editIndex;
-	var currentId = "";
-	$(document).on('click','.cusEdit',function () {
-		var cusId = $(this).attr('value');
-		currentId = cusId;
-		$.ajax({
-	      	type:"post",
-	      	dataType:"json",
-	      	url:"/customer/getCustomerById",
-	      	data:{"id":cusId},	
-	      	success:function(result){
-	            if(result.ret == 1){
-	            	var cus = result.cus;
-	                editIndex = layer.open({
-	                    type: 1,
-	                    title: '修改客户信息',
-	                    content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
-	                    "<span style='width: 80px'>姓名：</span><input value='"+cus.name+"' placeholder='联系人姓名' maxlength='10' id='cusConName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
-	                    "<span style='width: 80px'>电话：</span><input value='"+cus.phone+"' placeholder='联系人电话' oninput='if(value.length>11)value=value.slice(0,11)' id='cusConPhone' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='number'/></br> " +
-	                    "<span style='width: 80px'>公司名称：</span><input value='"+cus.company+"' placeholder='公司名称' maxlength='25' id='cusName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
-	                    "<span style='width: 80px'>公司地址：</span><input value='"+cus.address+"' placeholder='公司地址' maxlength='50' id='cusAddress' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
-	                    "<span id='cus_editSub' style='cursor: pointer;display: block;width: 80px;height: 30px;text-align: center;margin: 20px auto;background: cornflowerblue;line-height: 30px;color: white;border-radius: 5px'>确定</span>"+
-	                    "</div>",
-	                    anim: '1',
-	                    style: 'position:fixed;left:0; padding:10px 0; border:none;top: 50px;margin: 20px;right: 0px;border-radius: 10px;'
-	                });
-	            }else{
-	            	ErrTips(result.msg);
-	            }
-	          },
-	          error:function(result){
-	        	  ErrTips("服务器错误");
-	          }
-	      })
-	});
-	
 	
 	$(document).on('click','#cus_editSub',function () {
 		

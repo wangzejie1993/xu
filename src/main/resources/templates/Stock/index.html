@@ -57,7 +57,7 @@
 </head>
 <body>
 	<div class="cus_div1">
-	    <input  type="text" id="cusSearchInput" placeholder="输入客户信息进行查询" name="rolename" id="rolename"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+	    <input  type="text" id="cusSearchInput" placeholder="输入库存信息进行查询" name="rolename" id="rolename"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
     	<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>&nbsp;&nbsp; 
     	<button type="button" class="btn btn-success" id="addCustomer">新增用户</button>
 	</div>   
@@ -128,35 +128,6 @@
 			}
 		})
 	};
-	
-	$(document).on('click','.downOrder',function () {
-		var cusId = $(this).attr('value');
-		layer.prompt({title: '创建订单', formType: 3}, function(orderName, index){
-			if($.trim(orderName) == ""){
-				ErrTips("订单名称不能为空");
-		        return;
-			}
-			
-			$.ajax({
-		      	type:"post",
-		      	dataType:"json",
-		      	url:"/customer/goDownOrder",
-		      	data:{"id":cusId,"orderName":orderName},	
-		      	success:function(result){
-		            if(result.ret == 1){
-		            	TureTips(result.msg);
-		            }else{
-		            	ErrTips(result.msg);
-		            }
-		          },
-		          error:function(result){
-		        	  ErrTips("服务器错误");
-		          }
-		      })
-			layer.close(index);
-		});
-	});
-	
 	$(document).on('click','.cusDel',function () {
 		var cusId = $(this).attr('value');
 		console.log(cusId);
@@ -223,46 +194,6 @@
 	          }
 	      })
 	});
-	
-	
-	$(document).on('click','#cus_editSub',function () {
-		
-        var name = $("#cusConName").val();
-        var phone = $("#cusConPhone").val();
-        var company = $("#cusName").val();
-        var address = $("#cusAddress").val();
-        
-        if(currentId == ""){
-        	ErrTips("id不能为空");
-            return;
-        }
-        
-        if($.trim(name) == "" || $.trim(phone) == "" || $.trim(company) == "" || $.trim(address) == ""){
-        	ErrTips("有未填写的信息");
-            return;
-        }
-        
-        $.ajax({
-	      	type:"post",
-	      	dataType:"json",
-	      	url:"/customer/updateCustomerById",
-	      	data:{"name":name,"phone":phone,"company":company,"address":address,"id":currentId},	
-	      	success:function(result){
-	            if(result.ret == 1){
-	            	TureTips(result.msg);
-	            	layer.close(editIndex);
-	            	$("#cusTbody").empty();
-	            	getCustomerList();
-	            	//setTimeout("location.reload()",1500);
-	            }else{
-	            	ErrTips(result.msg);
-	            }
-	          },
-	          error:function(result){
-	        	  ErrTips("服务器错误");
-	          }
-	      })
-    });
 	
 	var addIndex;
 	$('#addCustomer').on('click',function(){

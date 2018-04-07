@@ -35,5 +35,10 @@ public interface IProductionPlanService extends IService<Production_plan> {
 	 * @return
 	 */
 	Map<String, Object> deleteProductionPlan(String plan);
+	
+	
+	Map<String, Object> selectProductionPlan(String search);
+
+	
 
 }
