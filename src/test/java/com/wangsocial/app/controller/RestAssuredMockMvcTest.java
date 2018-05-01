@@ -1,7 +1,9 @@
 package com.wangsocial.app.controller;
 
-import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
-import com.wangsocial.app.Application;
+import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,9 +15,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.servlet.http.HttpServletResponse;
-
-import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
+import com.wangsocial.app.Application;
 
 /**
  * Created by Lenovo on 2017/6/20.

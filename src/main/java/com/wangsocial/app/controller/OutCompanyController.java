@@ -24,8 +24,8 @@ public class OutCompanyController {
 	}
 
 	@RequestMapping(value = "/deleteoutcompany", method = RequestMethod.POST)
-	public Map<String, Object> deleteProductionPlan(String plan) {
-		Map<String, Object> map = outCompanyService.deleteOutCompany(plan);
+	public Map<String, Object> deleteProductionPlan(String id) {
+		Map<String, Object> map = outCompanyService.deleteOutCompany(id);
 		return map;
 	}
 

@@ -24,8 +24,8 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "/deleteTask", method = RequestMethod.POST)
-	public Map<String, Object> deleteTaskPlan(String plan) {
-		Map<String, Object> map = taskService.deleteTask(plan);
+	public Map<String, Object> deleteTaskPlan(String id) {
+		Map<String, Object> map = taskService.deleteTask(id);
 		return map;
 	}
 

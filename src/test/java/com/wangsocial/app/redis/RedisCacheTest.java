@@ -1,12 +1,13 @@
 package com.wangsocial.app.redis;
 
-import com.wangsocial.app.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.wangsocial.app.Application;
 
 /**
  * redis读写测试

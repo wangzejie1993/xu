@@ -1,11 +1,11 @@
 package com.wangsocial.app.controller;
 
-import com.jayway.restassured.RestAssured;
+import static com.jayway.restassured.RestAssured.get;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.jayway.restassured.RestAssured.get;
-import static org.hamcrest.Matchers.equalTo;
+import com.jayway.restassured.RestAssured;
 
 /**
  * Created by Lenovo on 2017/6/20.
