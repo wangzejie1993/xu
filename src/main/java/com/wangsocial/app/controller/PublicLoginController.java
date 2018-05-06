@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class PublicLoginController {
 
 	@RequestMapping(value = "/login")
-	public String Print( String username,String password,String verify) {
+	public String Print( String username,String password,String code) {
 		Map<String, Object> map = new HashMap<>();
 		if (username.equals("123")&&password.equals("123")) {
 			return "index1";
 		}
 		map.put("success", "1");
+		return "Public/login";
+	}
+	
+	@RequestMapping(value = "/logout")
+	public String logout() {
 		return "Public/login";
 	}
 }
