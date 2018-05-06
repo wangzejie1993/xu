@@ -50,11 +50,11 @@
 <body>
 <div class="container">
 
-    <form class="form-signin" method="post" action="../index.html">
-        <h2 class="form-signin-heading">登录系统</h2>
+    <form class="form-signin" method="post" action="/login">
+        <h2 class="form-signin-heading">后台管理系统登</h2>
         <input type="text" name="username" class="input-block-level" placeholder="账号">
         <input type="password" name="password" class="input-block-level" placeholder="密码">
-        <input type="text" name="verify" class="input-medium" placeholder="验证码">
+        
        
         <p><button class="btn btn-large btn-primary" type="submit">登录</button></p>
     </form>
@@ -62,3 +62,40 @@
 </div>
 </body>
 </html>
+<script type="text/javascript">
+$(document).on('click','.btn',function () {
+	var cusId = $(this).attr('value');
+	layer.prompt({title: '创建订单', formType: 3}, function(orderName, index){
+		if($.trim(orderName) == ""){
+			ErrTips("订单名称不能为空");
+	        return;
+		}
+		
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/customer/goDownOrder",
+	      	data:{"id":cusId,"orderName":orderName},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	TureTips(result.msg);
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+		layer.close(index);
+	});
+});
+
+function ErrTips(msg) {
+	layer.msg(msg,{icon:7,time:1000});
+}
+
+function TureTips(msg) {
+	layer.msg(msg,{icon:1,time:1500});
+}
+</script>
