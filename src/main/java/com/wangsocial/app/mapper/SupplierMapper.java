@@ -1,5 +1,6 @@
 package com.wangsocial.app.mapper;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
@@ -22,4 +23,10 @@ public interface SupplierMapper extends BaseMapper<Supplier> {
 			+ " where name like concat('%',#{content},'%') or company like concat('%',#{content},'%') "
 			+ " or address like concat('%',#{content},'%') and status = '1' order by create_date desc")
 	List<Supplier> getSupplierListByContent(String content);
+	
+	@Override
+	Supplier selectById(Serializable id);
+	
+	@Override
+	Integer updateById(Supplier entity);
 }

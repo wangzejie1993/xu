@@ -30,4 +30,18 @@ public interface IRawmaterialService extends IService<Rawmaterial> {
 	 * @return
 	 */
 	Map<String, Object> deleteRawmaterial(Rawmaterial rawmaterial);
+	
+	/**
+	 * 根据id查询物料
+	 * @param id
+	 * @return
+	 */
+	Map<String, Object> selectRawmaterialById(String id);
+	
+	/**
+	 * 更新物料信息
+	 * @param raw
+	 * @return
+	 */
+	Map<String, Object> updateRawmaterial(Rawmaterial raw);
 }

@@ -199,10 +199,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<includes>
@@ -218,6 +214,15 @@
 					<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
 				</configuration>
 			</plugin>
+			
+			<plugin>  
+                <groupId>org.springframework.boot</groupId>  
+                <artifactId>spring-boot-maven-plugin</artifactId>  
+                <configuration>  
+                    <!--fork :  如果没有该项配置，肯定devtools不会起作用，即应用不会restart -->  
+                    <fork>true</fork>  
+                </configuration>  
+            </plugin>  
 		</plugins>
 		<resources>
 			<!-- 打包时将jsp文件拷贝到META-INF目录下-->

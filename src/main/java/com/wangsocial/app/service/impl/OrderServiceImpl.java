@@ -61,9 +61,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 			return map;
 		}
 		try {
-			String id = UUID.randomUUID().toString().replace("-", "");
-			order.setId(id);
-			int flag = baseMapper.update(order, null);
+			int flag = baseMapper.updateById(order);
 			if (flag != 1) {
 				map.put("ret", -1);
 				map.put("msg", "更新订单失败");
@@ -133,7 +131,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 			map.put("msg", "程序出错，获取失败");
 			return map;
 		}
-		map.put("ret", -1);
+		map.put("ret", 1);
 		map.put("order", order);
 		map.put("msg", "获取成功");
 		return map;

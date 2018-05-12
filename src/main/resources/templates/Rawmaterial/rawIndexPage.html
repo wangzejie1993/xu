@@ -121,7 +121,7 @@
 	                    str += "<td class='time'>"+time+"</td>";
 	                    str += "<td>";
 	                    str += "<button value='"+raw.id+"' class='btn btn-primary raw rawDel'>删除</button>";
-	                    //str += "<button value='"+order.id+"' class='btn btn-primary ord ordEdit' style='background:#2196f3'>修改</button>";
+	                    str += "<button value='"+raw.id+"' class='btn btn-primary ord rawEdit' style='background:#2196f3'>修改</button>";
 	                    //str += "<button value='"+order.id+"' class='btn btn-primary ord downOrder' style='background:#3f51b5'>下单</button>";
 	                    //<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>
 	                    str += "</td>";
@@ -137,6 +137,91 @@
 			}
 		})
 	};
+	
+	var editIndex;
+	var currentId = "";
+	$(document).on('click','.rawEdit',function () {
+		var rawId = $(this).attr('value');
+		currentId = rawId;
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/rawmaterial/getRawmaterialById",
+	      	data:{"id":currentId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	var cus = result.cus;
+	                editIndex = layer.open({
+	                    type: 1,
+	                    title: '修改客户信息',
+	                    content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
+	                    "<span style='width: 80px'>物料名称：</span><input value='"+cus.name+"' placeholder='物料名称' maxlength='10' id='cusConName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>物料总数：</span><input value='"+cus.num+"' placeholder='物料总数'  id='cusnum' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>剩余数量：</span><input value='"+cus.surplus+"' placeholder='剩余数量' maxlength='25' id='cussurplus' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>出货数量：</span><input value='"+cus.outnum+"' placeholder='出货数量' maxlength='50' id='cusoutnum' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>购货次数：</span><input value='"+cus.purchaseNum+"' placeholder='购货次数' maxlength='50' id='cuspurchaseNum' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>出货次数：</span><input value='"+cus.shipmentNum+"' placeholder='出货次数' maxlength='50' id='cusshipmentNum' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span id='cus_editSub' style='cursor: pointer;display: block;width: 80px;height: 30px;text-align: center;margin: 20px auto;background: cornflowerblue;line-height: 30px;color: white;border-radius: 5px'>确定</span>"+
+	                    "</div>",
+	                    anim: '1',
+	                    style: 'position:fixed;left:0; padding:10px 0; border:none;top: 50px;margin: 20px;right: 0px;border-radius: 10px;'
+	                });
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	});
+	
+	
+	$(document).on('click','#cus_editSub',function () {
+		
+        var name = $("#cusConName").val();
+        var num = $("#cusnum").val();
+        var surplus = $("#cussurplus").val();
+        var outnum = $("#cusoutnum").val();
+        var purchaseNum = $("#cuspurchaseNum").val();
+        var shipmentNum = $("#cusshipmentNum").val();
+        
+        if(currentId == ""){
+        	ErrTips("id不能为空");
+            return;
+        }
+        console.log($.trim(name) == "");
+        console.log( $.trim(num) == "");
+        console.log($.trim(surplus) == "");
+        console.log( $.trim(outnum) == "");
+        console.log($.trim(purchaseNum) == "");
+        console.log($.trim(shipmentNum) == "");
+        if($.trim(name) == "" || $.trim(num) == "" || $.trim(surplus) == "" || $.trim(outnum) == ""||$.trim(purchaseNum) == ""||$.trim(shipmentNum) == ""){
+        	ErrTips("有未填写的信息");
+            return;
+        }
+        
+        $.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/rawmaterial/updateRawmaterial",
+	      	data:{"name":name,"num":num,"surplus":surplus,"outnum":outnum,"id":currentId,"purchaseNum":purchaseNum,"shipmentNum":shipmentNum},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	TureTips(result.msg);
+	            	layer.close(editIndex);
+	            	$("#cusTbody").empty();
+	            	getCustomerList();
+	            	//setTimeout("location.reload()",1500);
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+    });
 	
 	$("#rawSearchParams").on('click',function(){
 		var searchContent = $("#rawSearchInput").val();

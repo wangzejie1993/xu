@@ -102,4 +102,47 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier>
 		return map;
 	}
 
+	@Override
+	public Map<String, Object> selectById(String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (StringUtils.isBlank(id)) {
+			map.put("ret", -1);
+			map.put("msg", "id不能为空");
+			return map;
+		}
+		Supplier supplier = new Supplier();
+		try {
+			supplier = baseMapper.selectById(id);
+			
+		} catch (Exception e) {
+			map.put("ret", -1);
+			map.put("msg", "程序出错，查询失败");
+			return map;
+		}
+		map.put("cus", supplier);
+		map.put("ret", 1);
+		map.put("msg", "删除成功");
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> updateSupplier(Supplier supplier) {
+	Map<String, Object> map = new HashMap<String, Object>();
+	try {
+		int flag = baseMapper.updateById(supplier);
+		if (flag != 1) {
+			map.put("ret", -1);
+			map.put("msg", "更新失败");
+			return map;
+		}
+	} catch (Exception e) {
+		map.put("ret", -1);
+		map.put("msg", "程序出错，更新失败");
+		return map;
+	}
+	map.put("ret", 1);
+	map.put("msg", "删除成功");
+	return map;
+	}
+
 }

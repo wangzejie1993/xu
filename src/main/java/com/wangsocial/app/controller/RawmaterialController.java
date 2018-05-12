@@ -46,4 +46,15 @@ public class RawmaterialController {
 		return map;
 	}
 
+	@RequestMapping(value = "/getRawmaterialById", method = RequestMethod.POST)
+	public Map<String, Object> getRawmaterialById(String id) {
+		Map<String, Object> map = rawmaterialService.selectRawmaterialById(id);
+		return map;
+	}
+	@RequestMapping(value = "/updateRawmaterial", method = RequestMethod.POST)
+	public Map<String, Object> updateRawmaterial(Rawmaterial rawmaterial) {
+		Map<String, Object> map = rawmaterialService
+				.updateRawmaterial(rawmaterial);
+		return map;
+	}
 }

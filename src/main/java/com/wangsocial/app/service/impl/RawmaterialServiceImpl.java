@@ -103,4 +103,46 @@ public class RawmaterialServiceImpl extends
 		return map;
 	}
 
+	@Override
+	public Map<String, Object> selectRawmaterialById(String id) {
+		Map<String, Object> map = new HashMap<>();
+		if (StringUtils.isBlank(id)) {
+			map.put("ret", -1);
+			map.put("msg", "id不能为空");
+			return map;
+		}
+		Rawmaterial rawmaterial = new Rawmaterial();
+		try {
+			 rawmaterial  = baseMapper.selectById(id);
+		} catch (Exception e) {
+			map.put("ret", -1);
+			map.put("msg", "程序出错，查询失败");
+			return map;
+		}
+		map.put("cus", rawmaterial);
+		map.put("ret", 1);
+		map.put("msg", "查询成功");
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> updateRawmaterial(Rawmaterial raw) {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			Integer flag = baseMapper.updateById(raw);
+			if (flag != 1) {
+				map.put("ret", -1);
+				map.put("msg", "更新失败");
+				return map;
+			}
+		} catch (Exception e) {
+			map.put("ret", -1);
+			map.put("msg", "程序出错，更新失败");
+			return map;
+		}
+		map.put("ret", 1);
+		map.put("msg", "更新成功");
+		return map;
+	}
+
 }

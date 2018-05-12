@@ -112,7 +112,7 @@
 	                    str += "<td class='cus_time'>"+time+"</td>";
 	                    str += "<td>";
 	                    str += "<button value='"+order.id+"' class='btn btn-primary ord ordDel'>删除</button>";
-	                    //str += "<button value='"+order.id+"' class='btn btn-primary ord ordEdit' style='background:#2196f3'>修改</button>";
+	                    str += "<button value='"+order.id+"' class='btn btn-primary ord ordEdit' style='background:#2196f3'>修改</button>";
 	                    //str += "<button value='"+order.id+"' class='btn btn-primary ord downOrder' style='background:#3f51b5'>下单</button>";
 	                    //<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>
 	                    str += "</td>";
@@ -128,6 +128,112 @@
 			}
 		})
 	};
+	
+	var editIndex;
+	var currentId = "";
+	$(document).on('click','.ordEdit',function () {
+		var ordId = $(this).attr('value');
+		orderId = ordId;
+		console.log(orderId);
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/order/getOrderById",
+	      	data:{"id":orderId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	var cus = result.order;
+	            	var temp;
+	            	switch(cus.orderProcess){
+	            	case "1":
+	            		temp="下达订单";
+		            	break;
+	            	case  "2":
+	            		temp="制定生产工艺";
+		            	break;
+	            	case  "3":
+	            		temp="生产计划管理";
+		            	break;
+	            	case  "4":
+	            		temp="生产任务管理";
+		            	break;
+	            	case  "5":
+	            		temp="原材料发放";
+		            	break;
+	            	case "6" :
+	            		temp="加工";
+		            	break;
+	            	case  "7":
+	            		temp="印染";
+		            	break;
+	            	case  "8":
+	            		temp="成品";
+		            	break;
+	            	case  "9":
+	            		temp="订单完成";
+		            	break;
+	            	}
+	                editIndex = layer.open({
+	                    type: 1,
+	                    title: '修改订单信息',
+	                    content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
+	                    "<span style='width: 80px'>订单名称：</span><input value='"+cus.name+"' placeholder='订单名称' maxlength='10' id='cusConName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>订单时间：</span><input value='"+cus.probleOrder+"' placeholder='订单预估时间' id='cusConprobleOrder' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>订单状态：</span><input value='"+temp+"' placeholder='订单状态' maxlength='25' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='visibility:hidden'>订单状态：</span><input value='"+cus.orderProcess+"' placeholder='订单状态' maxlength='25' id='cusProcess' style='visibility:hidden' type='text'/></br> " +
+	                    "<span id='cus_editSub' style='cursor: pointer;display: block;width: 80px;height: 30px;text-align: center;margin: 20px auto;background: cornflowerblue;line-height: 30px;color: white;border-radius: 5px'>确定</span>"+
+	                    "</div>",
+	                    anim: '1',
+	                    style: 'position:fixed;left:0; padding:10px 0; border:none;top: 50px;margin: 20px;right: 0px;border-radius: 10px;'
+	                });
+	                
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	});
+	
+$(document).on('click','#cus_editSub',function () {
+		
+        var name = $("#cusConName").val();
+        var probleOrder = $("#cusConprobleOrder").val();
+        var status = $("#cusProcess").val();
+        
+        if(orderId == ""){
+        	ErrTips("id不能为空");
+            return;
+        }
+        if($.trim(name) == "" || $.trim(probleOrder) == "" || $.trim(status) == ""){
+        	ErrTips("有未填写的信息");
+            return;
+        }
+        
+        $.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/order/updateOrder",
+	      	data:{"name":name,"probleOrder":probleOrder,"status":status,"id":orderId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	TureTips(result.msg);
+	            	layer.close(editIndex);
+	            	$("#cusTbody").empty();
+	            	var searchContent = $("#ordSearchInput").val();
+	        		getOrderList(searchContent);
+	            	//setTimeout("location.reload()",1500);
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+    });
 	
 	$("#ordSearchParams").on('click',function(){
 		var searchContent = $("#ordSearchInput").val();
@@ -169,12 +275,28 @@
 	
 	$(document).on('click','.ordDel',function () {
 		var orderId = $(this).attr('value');
-		layer.confirm('确认删除吗？', {
-			icon:3,
-			btn: ['确定','取消'] //按钮
-			}, function(){
-				deleteOrder(orderId);
-			});
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/order/getOrderById",
+	      	data:{"id":orderId},	
+	      	success:function(result){
+	            if(result.ret == 1 && result.order.orderProcess=="1"){
+	            	layer.confirm('确认删除吗？', {
+	        			icon:3,
+	        			btn: ['确定','取消'] //按钮
+	        			}, function(){
+	        				deleteOrder(orderId);
+	        			});
+	            }else{
+	            	ErrTips("订单已经下达，无法删除");
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+		
 	});
 	
 	function deleteOrder(orderId){

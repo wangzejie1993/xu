@@ -1,5 +1,6 @@
 package com.wangsocial.app.mapper;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +27,10 @@ public interface RawmaterialMapper extends BaseMapper<Rawmaterial> {
 	@Select("update erp_rawmaterial set surplus = surplus - #{num},outnum = outnum + #{num},shipment_num = shipment_num + 1 "
 			+ " where id = #{id}")
 	void updateRawmaterialParamsById(Map<String, Object> map);
+	
+    @Override
+    Rawmaterial selectById(Serializable arg0);
+    
+    @Override
+    Integer updateById(Rawmaterial raw);
 }

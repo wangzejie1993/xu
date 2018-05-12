@@ -21,7 +21,7 @@ public class Order {
 
 	private String status;
 
-	@TableField("end_date")
+	@TableField("proble_order")
 	private String probleOrder;
 
 	@TableField("order_process")

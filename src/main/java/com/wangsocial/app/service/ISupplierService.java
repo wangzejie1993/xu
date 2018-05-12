@@ -30,4 +30,18 @@ public interface ISupplierService extends IService<Supplier> {
 	 * @return
 	 */
 	Map<String, Object> deleteSupplier(Supplier supplier);
+	
+	/**
+	 * 根据id查询数据
+	 * @param id
+	 * @return
+	 */
+	Map<String, Object> selectById(String id);
+	
+	/**
+	 * 更新
+	 * @param supplier
+	 * @return
+	 */
+	Map<String, Object> updateSupplier(Supplier supplier);
 }
