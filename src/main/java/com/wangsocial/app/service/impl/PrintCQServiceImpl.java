@@ -111,4 +111,27 @@ public class PrintCQServiceImpl extends ServiceImpl<PrintCQMapper, PrintCQ> impl
 
 	}
 
+	@Override
+	public Map<String, Object> selectById(String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		PrintCQ print = new PrintCQ();
+		if (StringUtils.isBlank(id)) {
+			map.put("ret", -1);
+			map.put("msg", "id不能为空");
+			return map;
+		}
+		try {
+			print = baseMapper.selectById(id);
+		} catch (Exception e) {
+			map.put("ret", -1);
+			map.put("msg", "程序出错，查询失败");
+			return map;
+		}
+		map.put("cus", print);
+		map.put("ret", 1);
+		map.put("msg", "查询成功");
+		return map;
+
+	}
+
 }

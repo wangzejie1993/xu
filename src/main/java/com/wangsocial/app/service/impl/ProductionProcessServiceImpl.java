@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.wangsocial.app.entity.Order;
 import com.wangsocial.app.entity.OrderProductionReleation;
+import com.wangsocial.app.entity.Production;
 import com.wangsocial.app.entity.ProductionProcessReleationship;
 import com.wangsocial.app.mapper.OrderMapper;
 import com.wangsocial.app.mapper.OrderProductionReleationMapper;
@@ -170,5 +171,19 @@ public class ProductionProcessServiceImpl extends
 		map.put("msg", "删除成功");
 		return map;
 	}
+
+	@Override
+	public Map<String, Object> selectProduction(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> updateProduction(Production production) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

@@ -37,5 +37,7 @@ public interface IPrintCQService extends IService<PrintCQ> {
 	 * @return
 	 */
 	Map<String, Object> deletePrintCQ(String print);
+	
+	Map<String, Object> selectById(String id);
 
 }

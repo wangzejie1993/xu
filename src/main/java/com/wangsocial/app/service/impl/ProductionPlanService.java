@@ -92,7 +92,7 @@ public class ProductionPlanService extends ServiceImpl<ProductionPlanMapper, Pro
 			return map;
 		}
 
-		map.put("list", list);
+		map.put("cus", list);
 		map.put("ret", 1);
 		map.put("msg", "获取成功");
 		return map;

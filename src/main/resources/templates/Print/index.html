@@ -112,7 +112,7 @@
 	                    str += "<td class='cus_time'>"+time+"</td>";
 	                    str += "<td>";
 	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusDel'>删除</button>";
-	                   // str += "<button value='"+cus.id+"' class='btn btn-primary cus cusEdit' style='background:#2196f3'>修改</button>";
+	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusEdit' style='background:#2196f3'>修改</button>";
 	                    //str += "<button value='"+cus.id+"' class='btn btn-primary cus downOrder' style='background:#3f51b5'>下单</button>";
 	                    //<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>
 	                    str += "</td>";
@@ -128,6 +128,82 @@
 			}
 		})
 	};
+	var editIndex;
+	var currentId = "";
+	$(document).on('click','.cusEdit',function () {
+		var cusId = $(this).attr('value');
+		currentId = cusId;
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/print/getCustomerById",
+	      	data:{"id":cusId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	var cus = result.cus;
+	                editIndex = layer.open({
+	                    type: 1,
+	                    title: '修改客户信息',
+	                    content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
+	                    "<span style='width: 80px'>姓名：</span><input value='"+cus.name+"' placeholder='联系人姓名' maxlength='10' id='cusConName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>电话：</span><input value='"+cus.phone+"' placeholder='联系人电话' oninput='if(value.length>11)value=value.slice(0,11)' id='cusConPhone' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='number'/></br> " +
+	                    "<span style='width: 80px'>公司名称：</span><input value='"+cus.company+"' placeholder='公司名称' maxlength='25' id='cusName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>公司地址：</span><input value='"+cus.address+"' placeholder='公司地址' maxlength='50' id='cusAddress' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span id='cus_editSub' style='cursor: pointer;display: block;width: 80px;height: 30px;text-align: center;margin: 20px auto;background: cornflowerblue;line-height: 30px;color: white;border-radius: 5px'>确定</span>"+
+	                    "</div>",
+	                    anim: '1',
+	                    style: 'position:fixed;left:0; padding:10px 0; border:none;top: 50px;margin: 20px;right: 0px;border-radius: 10px;'
+	                });
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	});
+	
+	
+	$(document).on('click','#cus_editSub',function () {
+		
+        var name = $("#cusConName").val();
+        var phone = $("#cusConPhone").val();
+        var company = $("#cusName").val();
+        var address = $("#cusAddress").val();
+        
+        if(currentId == ""){
+        	ErrTips("id不能为空");
+            return;
+        }
+        
+        if($.trim(name) == "" || $.trim(phone) == "" || $.trim(company) == "" || $.trim(address) == ""){
+        	ErrTips("有未填写的信息");
+            return;
+        }
+        
+        $.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/customer/updateCustomerById",
+	      	data:{"name":name,"phone":phone,"company":company,"address":address,"id":currentId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	TureTips(result.msg);
+	            	layer.close(editIndex);
+	            	$("#cusTbody").empty();
+	            	getCustomerList();
+	            	//setTimeout("location.reload()",1500);
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+    });
+	
 	
 	$(document).on('click','.cusDel',function () {
 		var cusId = $(this).attr('value');

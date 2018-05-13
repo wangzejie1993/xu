@@ -110,6 +110,7 @@
 	                    str += "<td class='cus_time'>"+time+"</td>";
 	                    str += "<td>";
 	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusDel'>删除</button>";
+	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusEdit' style='background:#2196f3'>修改</button>";
 	                    str += "</td>";
 	                    str += "</tr>";
 	                    $("#cusTbody").append(str);
@@ -123,6 +124,81 @@
 			}
 		})
 	};
+	
+	var editIndex;
+	var currentId = "";
+	$(document).on('click','.cusEdit',function () {
+		var cusId = $(this).attr('value');
+		currentId = cusId;
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/outcompany/getoutcompanyListById",
+	      	data:{"id":cusId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	var cus = result.cus;
+	                editIndex = layer.open({
+	                    type: 1,
+	                    title: '修改客户信息',
+	                    content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
+	                    "<span style='width: 80px'>公司名称：</span><input value='"+cus.taskName+"' placeholder='公司名称' maxlength='10' id='cusConName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>任务编号：</span><input value='"+cus.taskId+"' placeholder='任务编号' ' id='cusConPhone' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>任务名称：</span><input value='"+cus.taskTime+"' placeholder='任务名称' maxlength='25' id='cusName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span id='cus_editSub' style='cursor: pointer;display: block;width: 80px;height: 30px;text-align: center;margin: 20px auto;background: cornflowerblue;line-height: 30px;color: white;border-radius: 5px'>确定</span>"+
+	                    "</div>",
+	                    anim: '1',
+	                    style: 'position:fixed;left:0; padding:10px 0; border:none;top: 50px;margin: 20px;right: 0px;border-radius: 10px;'
+	                });
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	});
+	
+	
+	$(document).on('click','#cus_editSub',function () {
+		
+        var taskName = $("#cusConName").val();
+        var taskId = $("#cusConPhone").val();
+        var taskTime = $("#cusName").val();
+        
+        if(currentId == ""){
+        	ErrTips("id不能为空");
+            return;
+        }
+        
+        if($.trim(taskName) == "" || $.trim(taskId) == "" || $.trim(taskTime) == "" ){
+        	ErrTips("有未填写的信息");
+            return;
+        }
+        
+        $.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/outcompany/updateoutcompany",
+	      	data:{"taskName":taskName,"taskId":taskId,"taskTime":taskTime,"id":currentId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	TureTips(result.msg);
+	            	layer.close(editIndex);
+	            	$("#cusTbody").empty();
+	            	getCustomerList();
+	            	//setTimeout("location.reload()",1500);
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+    });
+	
 	$(document).on('click','.cusDel',function () {
 		var cusId = $(this).attr('value');
 		console.log(cusId);

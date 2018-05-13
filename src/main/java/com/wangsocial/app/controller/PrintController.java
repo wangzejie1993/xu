@@ -40,4 +40,10 @@ public class PrintController {
 		Map<String, Object> map = printCQService.selectPrintCQ();
 		return map;
 	}
+	
+	@RequestMapping(value = "/getPrintListById", method = RequestMethod.POST)
+	public Map<String, Object> getTaskPlanListById(String Id) {
+		Map<String, Object> map = printCQService.selectById(Id);
+		return map;
+	}
 }

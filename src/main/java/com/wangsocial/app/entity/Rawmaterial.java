@@ -35,6 +35,28 @@ public class Rawmaterial {
 	private Date endDate;
 
 	private String status;
+	
+	private String person;
+	
+	private String phone;
+	
+	
+
+	public String getPerson() {
+		return person;
+	}
+
+	public void setPerson(String person) {
+		this.person = person;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public String getNum() {
 		return num;

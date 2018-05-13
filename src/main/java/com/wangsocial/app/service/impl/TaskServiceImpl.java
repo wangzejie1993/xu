@@ -114,4 +114,26 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 		return map;
 	}
 
+	@Override
+	public Map<String, Object> selectById(String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Task task = new Task();
+		if (StringUtils.isBlank(id)) {
+			map.put("ret", -1);
+			map.put("msg", "id不能为空");
+			return map;
+		}
+		try {
+			task =baseMapper.selectById(id);
+		} catch (Exception e) {
+			map.put("ret", -1);
+			map.put("msg", "程序出错，查询失败");
+			return map;
+		}
+		map.put("cus", task);
+		map.put("ret", 1);
+		map.put("msg", "查询成功");
+		return map;
+	}
+
 }

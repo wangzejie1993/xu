@@ -111,7 +111,7 @@
 	                    str += "<td>"+cus.judge+"</td>";
 	                    str += "<td>";
 	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusDel'>删除</button>";
-	                   // str += "<button value='"+cus.id+"' class='btn btn-primary cus cusEdit' style='background:#2196f3'>修改</button>";
+	                    str += "<button value='"+cus.id+"' class='btn btn-primary cus cusEdit' style='background:#2196f3'>修改</button>";
 	                    //str += "<button value='"+cus.id+"' class='btn btn-primary cus downOrder' style='background:#3f51b5'>添加生产计划</button>";
 	                    //<button type="button" id="cusSearchParams" class="btn btn-primary">查询</button>
 	                    str += "</td>";
@@ -128,7 +128,83 @@
 		})
 	};
 	
+	var editIndex;
+	var currentId = "";
+	$(document).on('click','.cusEdit',function () {
+		var cusId = $(this).attr('value');
+		currentId = cusId;
+		$.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/production_plan/getProductionBySearch",
+	      	data:{"search":cusId},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	var cus = result.cus;
+	                editIndex = layer.open({
+	                    type: 1,
+	                    title: '修改客户信息',
+	                    content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
+	                    "<span style='width: 80px'>生产计划名称：</span><input value='"+cus.name+"' placeholder='生产计划名称' maxlength='10' id='cusConName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>订单名称：</span><input value='"+cus.productionName+"' placeholder='订单名称' id='cusConPhone' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    //"<span style='width: 80px'>原材料名称：</span><input value='"+cus.rawmaterialName+"' placeholder='原材料名称' maxlength='25' id='cusName' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>计划时间：</span><input value='"+cus.planTime+"' placeholder='计划时间' maxlength='50' id='cusAddress' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span style='width: 80px'>是否改为分配：</span><input value='"+cus.judge+"' placeholder='是否改为分配' maxlength='10' id='cusConName1' style='padding: 5px 10px;outline: none;border: none; border-bottom: 1px solid #ccc;width: 200px' type='text'/></br> " +
+	                    "<span id='cus_editSub' style='cursor: pointer;display: block;width: 80px;height: 30px;text-align: center;margin: 20px auto;background: cornflowerblue;line-height: 30px;color: white;border-radius: 5px'>确定</span>"+
+	                    "</div>",
+	                    anim: '1',
+	                    style: 'position:fixed;left:0; padding:10px 0; border:none;top: 50px;margin: 20px;right: 0px;border-radius: 10px;'
+	                });
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+	});
 	
+	
+	$(document).on('click','#cus_editSub',function () {
+		
+        var name = $("#cusConName").val();
+        var productionName = $("#cusConPhone").val();
+        var rawmaterialName = $("#cusName").val();
+        var planTime = $("#cusAddress").val();
+        var judge = $("#cusConName1").val();
+        
+        if(currentId == ""){
+        	ErrTips("id不能为空");
+            return;
+        }
+        
+        if($.trim(name) == "" || $.trim(productionName) == "" || $.trim(rawmaterialName) == "" || $.trim(planTime) == ""|| $.trim(judge) == ""){
+        	ErrTips("有未填写的信息");
+            return;
+        }
+        
+        $.ajax({
+	      	type:"post",
+	      	dataType:"json",
+	      	url:"/production_plan/updateProductionPlan",
+	      	data:{"name":name,"productionName":productionName,"rawmaterialName":rawmaterialName,"planTime":planTime,"id":currentId,"judge":judge},	
+	      	success:function(result){
+	            if(result.ret == 1){
+	            	TureTips(result.msg);
+	            	layer.close(editIndex);
+	            	$("#cusTbody").empty();
+	            	getCustomerList();
+	            	//setTimeout("location.reload()",1500);
+	            }else{
+	            	ErrTips(result.msg);
+	            }
+	          },
+	          error:function(result){
+	        	  ErrTips("服务器错误");
+	          }
+	      })
+    });
 	
 	$(document).on('click','.cusDel',function () {
 		var cusId = $(this).attr('value');

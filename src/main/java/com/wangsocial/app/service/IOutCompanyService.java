@@ -38,5 +38,7 @@ public interface IOutCompanyService extends IService<Out_company> {
 	 * @return
 	 */
 	Map<String, Object> deleteOutCompany(String company);
+	
+	Map<String, Object> selectById(String id);
 
 }

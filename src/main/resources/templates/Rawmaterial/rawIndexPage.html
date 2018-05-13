@@ -76,6 +76,8 @@
     	<thead>
     		<tr>
 		        <th>物料名称</th>
+		        <th>责任人</th>
+		        <th>责任人电话</th>
 		        <th>物料总数</th>
 		        <th>剩余数量</th>
 		       	<th>出货数量</th>
@@ -112,6 +114,8 @@
 	                    var raw = rl[i];
 	                    var str = "<tr class='raw_"+raw.id+"'>";
 	                    str += "<td>"+raw.name+"</td>";
+	                    str += "<td>"+raw.person+"</td>";
+	                    str += "<td>"+raw.phone+"</td>";
 	                    str += "<td>"+raw.num+"</td>";
 	                    str += "<td>"+raw.surplus+"</td>";
 	                    str += "<td>"+raw.outnum+"</td>";

@@ -37,5 +37,7 @@ public interface ITaskService extends IService<Task> {
 	 * @return
 	 */
 	Map<String, Object> deleteTask(String task);
+	
+	Map<String, Object> selectById(String id);
 
 }

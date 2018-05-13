@@ -40,4 +40,10 @@ public class OutCompanyController {
 		Map<String, Object> map = outCompanyService.selectOutCompany();
 		return map;
 	}
+	
+	@RequestMapping(value = "/getoutcompanyListById", method = RequestMethod.POST)
+	public Map<String, Object> getProductionPlanListById(String id) {
+		Map<String, Object> map = outCompanyService.selectById(id);
+		return map;
+	}
 }

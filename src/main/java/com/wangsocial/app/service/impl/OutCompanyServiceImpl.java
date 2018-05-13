@@ -113,4 +113,27 @@ public class OutCompanyServiceImpl extends ServiceImpl<OutCompanyMapper, Out_com
 		return map;
 	}
 
+	@Override
+	public Map<String, Object> selectById(String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Out_company company = new Out_company();
+		if (StringUtils.isBlank(id)) {
+			map.put("ret", -1);
+			map.put("msg", "id不能为空");
+			return map;
+		}
+		try {
+			company = baseMapper.selectById(id);
+			
+		} catch (Exception e) {
+			map.put("ret", -1);
+			map.put("msg", "程序出错，查询失败");
+			return map;
+		}
+		map.put("cus", company);
+		map.put("ret", 1);
+		map.put("msg", "查询成功");
+		return map;
+	}
+
 }

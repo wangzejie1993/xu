@@ -40,4 +40,10 @@ public class TaskController {
 		Map<String, Object> map = taskService.selectTask();
 		return map;
 	}
+	
+	@RequestMapping(value = "/getTaskListById", method = RequestMethod.POST)
+	public Map<String, Object> getTaskPlanListById(String Id) {
+		Map<String, Object> map = taskService.selectById(Id);
+		return map;
+	}
 }
