@@ -49,6 +49,18 @@
 			        <option value="0">请选择</option>
       			</select>
 		</label>
+		<label class="">
+			<span><em>*</em>使用材料：</span>
+      			<select id="rawInfo1">
+			        <option value="0">请选择</option>
+      			</select>
+		</label>
+		<label class="">
+			<span><em>*</em>使用材料：</span>
+      			<select id="rawInfo2">
+			        <option value="0">请选择</option>
+      			</select>
+		</label>
 		<label>
 			<span><em>*</em>材料数量：</span>
 			<input type="number" id="num" maxlength="12"/>
@@ -91,7 +103,9 @@ laydate.render({
 	            	rawJson = rl;
 	            	for(var i = 0;i < rl.length; i++){
 	            		var raw = rl[i];
-	            		$("#rawInfo").append("<option value='"+raw.id+"'>"+raw.name+"</option>");	
+	            		$("#rawInfo").append("<option value='"+raw.id+"'>"+raw.name+"</option>");
+	            		$("#rawInfo1").append("<option value='"+raw.id+"'>"+raw.name+"</option>");
+	            		$("#rawInfo2").append("<option value='"+raw.id+"'>"+raw.name+"</option>");
 	            	}
 	            	console.log(rawJson);
 	            }else{
@@ -134,7 +148,12 @@ laydate.render({
 		var name = $("#pname").val();
 		var wtime = $("#wtime").val();
 		var num = $("#num").val();
-		var rawName = $('#rawInfo option:selected').text();//选中的文本
+		
+		var raw = $('#rawInfo option:selected').text();
+		var raw1 = $('#rawInfo1 option:selected').text();
+		var raw2 = $('#rawInfo2 option:selected').text();
+		
+		var rawName = raw+","+raw1+","+raw2//选中的文本
 		var rawId = $('#rawInfo option:selected') .val();//选中的值
 		var orderName = $('#orders option:selected').text();//选中的文本
 		var orderId = $('#orders option:selected') .val();//选中的值
