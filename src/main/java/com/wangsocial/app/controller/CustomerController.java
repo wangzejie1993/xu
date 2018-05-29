@@ -6,6 +6,7 @@ import com.wangsocial.app.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -25,7 +26,9 @@ public class CustomerController {
 	private ICustomerService customerService;
 
 	@RequestMapping(value="/insertCustomer",method = RequestMethod.POST)
-	public Map<String,Object> insertCustomer(Customer customer){
+	public Map<String,Object> insertCustomer(Customer customer,
+			@RequestParam(value="orderId")String orderId,
+			@RequestParam(value="orderName")String orderName){
 		Map<String,Object> map = customerService.insertCustomer(customer);
 		return map;
 	}

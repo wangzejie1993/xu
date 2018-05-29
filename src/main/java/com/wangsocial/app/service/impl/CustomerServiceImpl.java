@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.wangsocial.app.entity.Customer;
 import com.wangsocial.app.entity.CustomerOrderReleation;
 import com.wangsocial.app.entity.Order;
+import com.wangsocial.app.entity.OrderProductionReleation;
 import com.wangsocial.app.mapper.CustomerMapper;
 import com.wangsocial.app.mapper.CustomerOrderReleationMapper;
 import com.wangsocial.app.mapper.OrderMapper;
@@ -40,36 +41,97 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 	private CustomerOrderReleationMapper coReleationMapper;
 	
 	@Override
-	public Map<String,Object> insertCustomer(Customer customer) {
-		Map<String,Object> map = new HashMap<String, Object>();
-		if(StringUtils.isBlank(customer.getName()) || StringUtils.isBlank(customer.getPhone()) 
-				|| StringUtils.isBlank(customer.getCompany()) ||StringUtils.isBlank(customer.getAddress())){
-			map.put("ret", -1);
-			map.put("msg", "有未填写的信息");
-			return map;
-		}
-		if(!customer.getPhone().matches(BasePatterns.PHONE_FORMAT)){
-			map.put("ret", -1);
-			map.put("msg", "手机格式错误");
-			return map;
-		}
-		try{
-			String id = UUID.randomUUID().toString().replace("-", "");
-			customer.setId(id);
-			int flag = baseMapper.insert(customer);
-			if(flag != 1){
+	public Map<String,Object> insertCustomer(Customer customer,String orderId,String orderName) {
+		if (StringUtils.isBlank(orderId) || StringUtils.isBlank(orderName)) {
+			Map<String,Object> map = new HashMap<String, Object>();
+			if(StringUtils.isBlank(customer.getName()) || StringUtils.isBlank(customer.getPhone()) 
+					|| StringUtils.isBlank(customer.getCompany()) ||StringUtils.isBlank(customer.getAddress())){
 				map.put("ret", -1);
-				map.put("msg", "添加客户失败");
+				map.put("msg", "有未填写的信息");
 				return map;
 			}
-		}catch(Exception e){
-			map.put("ret", -1);
-			map.put("msg", "程序出错，添加客户失败");
+			if(!customer.getPhone().matches(BasePatterns.PHONE_FORMAT)){
+				map.put("ret", -1);
+				map.put("msg", "手机格式错误");
+				return map;
+			}
+			try{
+				String id = UUID.randomUUID().toString().replace("-", "");
+				customer.setId(id);
+				int flag = baseMapper.insert(customer);
+				if(flag != 1){
+					map.put("ret", -1);
+					map.put("msg", "添加客户失败");
+					return map;
+				}
+			}catch(Exception e){
+				map.put("ret", -1);
+				map.put("msg", "程序出错，添加客户失败");
+				return map;
+			}
+			map.put("ret", 1);
+			map.put("msg", "添加成功");
+			return map;
+		}else {
+			Map<String,Object> map = new HashMap<String, Object>();
+			if(StringUtils.isBlank(customer.getName()) || StringUtils.isBlank(customer.getPhone()) 
+					|| StringUtils.isBlank(customer.getCompany()) ||StringUtils.isBlank(customer.getAddress())){
+				map.put("ret", -1);
+				map.put("msg", "有未填写的信息");
+				return map;
+			}
+			if(!customer.getPhone().matches(BasePatterns.PHONE_FORMAT)){
+				map.put("ret", -1);
+				map.put("msg", "手机格式错误");
+				return map;
+			}
+			try{
+				String id = UUID.randomUUID().toString().replace("-", "");
+				customer.setId(id);
+				int flag = baseMapper.insert(customer);
+				if(flag != 1){
+					map.put("ret", -1);
+					map.put("msg", "添加客户失败");
+					return map;
+				}
+				
+				// opMapper 添加订单与 工艺关联关系
+				OrderProductionReleation opr = new OrderProductionReleation();
+				opr.setId(UUID.randomUUID().toString().replace("-", ""));
+				opr.setOrderId(dto.getOrderId());
+				opr.setOrderName(dto.getOrderName());
+				opr.setProductionId(productionId);
+				opr.setProductionName(dto.getName());
+				int opFlag = opMapper.insert(opr);
+				if (opFlag != 1) {
+					map.put("ret", -1);
+					map.put("msg", "添加 订单与工艺关联关系失败");
+					return map;
+				}
+
+				// 更新订单状态
+				Order order = new Order();
+				order.setId(dto.getOrderId());
+				order.setOrderProcess("2");
+				int oFlag = orderMapper.updateById(order);
+				if (oFlag != 1) {
+					map.put("ret", -1);
+					map.put("msg", "更新订单状态失败");
+					return map;
+				}
+				
+				
+			}catch(Exception e){
+				map.put("ret", -1);
+				map.put("msg", "程序出错，添加客户失败");
+				return map;
+			}
+			map.put("ret", 1);
+			map.put("msg", "添加成功");
 			return map;
 		}
-		map.put("ret", 1);
-		map.put("msg", "添加成功");
-		return map;
+		
+		
 	}
 
 	@Override

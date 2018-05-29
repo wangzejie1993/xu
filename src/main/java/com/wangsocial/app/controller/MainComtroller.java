@@ -98,6 +98,12 @@ public class MainComtroller {
 	public String getPrint() {
 		return "Print/index";
 	}
+	
+	@RequestMapping(value = "/Print/add")
+	public String getPrintAdd() {
+		return "Print/add";
+	}
+	
 	@RequestMapping(value = "/ProductionPlan/index")
 	public String getProductionPlan() {
 		return "ProductionPlan/index";

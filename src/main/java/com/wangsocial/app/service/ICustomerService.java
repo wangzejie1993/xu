@@ -18,7 +18,7 @@ public interface ICustomerService extends IService<Customer> {
 	 * 新增客户
 	 * @return
 	 */
-	Map<String,Object> insertCustomer(Customer customer);
+	Map<String,Object> insertCustomer(Customer customer,String orderId,String orderName);
 	
 	/**
 	 * 获取客户列表
