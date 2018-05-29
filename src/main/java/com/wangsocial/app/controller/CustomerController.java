@@ -29,7 +29,7 @@ public class CustomerController {
 	public Map<String,Object> insertCustomer(Customer customer,
 			@RequestParam(value="orderId")String orderId,
 			@RequestParam(value="orderName")String orderName){
-		Map<String,Object> map = customerService.insertCustomer(customer);
+		Map<String,Object> map = customerService.insertCustomer(customer,orderId,orderName);
 		return map;
 	}
 	
