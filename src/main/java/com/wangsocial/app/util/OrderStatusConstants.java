@@ -46,5 +46,10 @@ public class OrderStatusConstants {
 	 * 9.订单完成
 	 */
 	public static String FINISHED_ORDER = "订单完成";
+	
+	/**
+	 * 10.订单完成
+	 */
+	public static String OUT_COMPANY = "外协";
 
 }

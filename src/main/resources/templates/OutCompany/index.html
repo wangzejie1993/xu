@@ -308,8 +308,9 @@
 	
 	var addIndex;
 	$('#addCustomer').on('click',function(){
+		window.location.href = "add";
 		//弹出层
-        addIndex = layer.open({
+        /* addIndex = layer.open({
             type: 1,
             title: '添加客户',
             content: "<div style='line-height: 20px;margin: 10px 20px;width: 300px;font-size: 13px'>" +
@@ -321,7 +322,7 @@
             "</div>",
             anim: '1',
             style: 'position:fixed;left:0; padding:10px 0; border:none;top: 50px;margin: 20px;right: 0px;border-radius: 10px;'
-        });
+        }); */
 	});
 	
 	$(document).on('click','#cus_submit',function () {

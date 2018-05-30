@@ -82,8 +82,15 @@ laydate.render({
 	            	console.log(ol);
 	            	for(var i = 0;i < ol.length; i++){
 	            		var ord = ol[i];
-	            		if(ord.orderProcess == "下达订单"){
+	            		if(ord.orderProcess == "外协"){
 	            			$("#orders").append("<option value='"+ord.id+"'>"+ord.name+"</option>");	
+	            		}else{
+	            			layer.confirm('未找到需要印染的订单，请完成上一状态', {
+	    	        			icon:3,
+	    	        			btn: ['印染列表'] //按钮
+	    	        			},function(){
+	    	        				window.history.go(-1);
+	    	        			});
 	            		}	
 	            	}
 	            }else{
@@ -116,12 +123,20 @@ $(document).on('click','#subtn',function () {
 	      	url:"/customer/insertCustomer",
 	      	data:{"name":name,"phone":phone,"company":company,"address":address,"orderId":orderId,"orderName":orderName},	
 	      	success:function(result){
-	            if(result.ret == 1){
-	            	TureTips(result.msg);
-	            	layer.close(addIndex);
-	            	$("#cusTbody").empty();
-	            	getCustomerList();
-	            	//setTimeout("location.reload()",1500);
+	      		if(result.ret == 1){
+	            	layer.confirm('添加成功', {
+	        			icon:3,
+	        			btn: ['继续添加','印染列表'] //按钮
+	        			}, function(){
+	        				$("#cusConName").val("");
+	        				$("#cusConPhone").val("");
+	        				$("#cusName").val("");
+	        				$("#cusAddress").val("");
+	        				$("#orders").val(0);
+	        				$("#rawInfo").val(0);
+	        			},function(){
+	        				window.history.go(-1);
+	        			});
 	            }else{
 	            	ErrTips(result.msg);
 	            }

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wangsocial.app.entity.Out_company;
@@ -18,8 +19,10 @@ public class OutCompanyController {
 	private IOutCompanyService outCompanyService;
 
 	@RequestMapping(value = "/insertoutcompany", method = RequestMethod.POST)
-	public Map<String, Object> insertProductionPlan(Out_company plan) {
-		Map<String, Object> map = outCompanyService.insertOutCompanyn(plan);
+	public Map<String, Object> insertProductionPlan(Out_company plan,
+			@RequestParam(value="orderId")String orderId,
+			@RequestParam(value="orderName")String orderName) {
+		Map<String, Object> map = outCompanyService.insertOutCompanyn(plan,orderId,orderName);
 		return map;
 	}
 

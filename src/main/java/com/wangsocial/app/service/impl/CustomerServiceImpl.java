@@ -95,24 +95,10 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 					return map;
 				}
 				
-				// opMapper 添加订单与 工艺关联关系
-				OrderProductionReleation opr = new OrderProductionReleation();
-				opr.setId(UUID.randomUUID().toString().replace("-", ""));
-				opr.setOrderId(dto.getOrderId());
-				opr.setOrderName(dto.getOrderName());
-				opr.setProductionId(productionId);
-				opr.setProductionName(dto.getName());
-				int opFlag = opMapper.insert(opr);
-				if (opFlag != 1) {
-					map.put("ret", -1);
-					map.put("msg", "添加 订单与工艺关联关系失败");
-					return map;
-				}
-
 				// 更新订单状态
 				Order order = new Order();
-				order.setId(dto.getOrderId());
-				order.setOrderProcess("2");
+				order.setId(orderId);
+				order.setOrderProcess("7");
 				int oFlag = orderMapper.updateById(order);
 				if (oFlag != 1) {
 					map.put("ret", -1);

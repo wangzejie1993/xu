@@ -7,47 +7,99 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.wangsocial.app.entity.Order;
 import com.wangsocial.app.entity.Out_company;
 import com.wangsocial.app.entity.Production_plan;
+import com.wangsocial.app.mapper.OrderMapper;
 import com.wangsocial.app.mapper.OutCompanyMapper;
 import com.wangsocial.app.service.IOutCompanyService;
 
 @Service
 public class OutCompanyServiceImpl extends ServiceImpl<OutCompanyMapper, Out_company> implements IOutCompanyService {
 
+	@Autowired
+	private OrderMapper orderMapper;
+	
 	@Override
-	public Map<String, Object> insertOutCompanyn(Out_company company) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (StringUtils.isBlank(company.getName())
-				|| StringUtils.isBlank(company.getTaskId())
-				|| StringUtils.isBlank(company.getTaskName())
-				|| StringUtils.isBlank(company.getOther())
-				) {
-			map.put("ret", -1);
-			map.put("msg", "有未填写的外协企业信息");
-			return map;
-		}
-		try {
-			String id = UUID.randomUUID().toString().replace("-", "");
-			company.setId(id);
-			int flag = baseMapper.insert(company);
-			if (flag != 1) {
+	public Map<String, Object> insertOutCompanyn(Out_company company,String orderId,String orderName) {
+		
+		if (StringUtils.isBlank(orderId)
+				|| StringUtils.isBlank(orderName)) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			if (StringUtils.isBlank(company.getName())
+					|| StringUtils.isBlank(company.getTaskId())
+					|| StringUtils.isBlank(company.getTaskName())
+					|| StringUtils.isBlank(company.getOther())
+					) {
 				map.put("ret", -1);
-				map.put("msg", "外协企业添加失败");
+				map.put("msg", "有未填写的外协企业信息");
 				return map;
 			}
-		} catch (Exception e) {
-			map.put("ret", -1);
-			map.put("msg", "程序出错，外协企业添加失败");
+			try {
+				String id = UUID.randomUUID().toString().replace("-", "");
+				company.setId(id);
+				int flag = baseMapper.insert(company);
+				if (flag != 1) {
+					map.put("ret", -1);
+					map.put("msg", "外协企业添加失败");
+					return map;
+				}
+			} catch (Exception e) {
+				map.put("ret", -1);
+				map.put("msg", "程序出错，外协企业添加失败");
+				return map;
+			}
+			map.put("ret", 1);
+			map.put("msg", "外协企业添加成功");
 			return map;
 		}
-		map.put("ret", 1);
-		map.put("msg", "外协企业添加成功");
-		return map;
+		else {
+			Map<String, Object> map = new HashMap<String, Object>();
+			if (StringUtils.isBlank(company.getName())
+					|| StringUtils.isBlank(company.getTaskId())
+					|| StringUtils.isBlank(company.getTaskName())
+					|| StringUtils.isBlank(company.getOther())
+					) {
+				map.put("ret", -1);
+				map.put("msg", "有未填写的外协企业信息");
+				return map;
+			}
+			try {
+				String id = UUID.randomUUID().toString().replace("-", "");
+				company.setId(id);
+				int flag = baseMapper.insert(company);
+				if (flag != 1) {
+					map.put("ret", -1);
+					map.put("msg", "外协企业添加失败");
+					return map;
+				}
+				// 更新订单状态
+				Order order = new Order();
+				order.setId(orderId);
+				order.setOrderProcess("10");
+				int oFlag = orderMapper.updateById(order);
+				if (oFlag != 1) {
+					map.put("ret", -1);
+					map.put("msg", "更新订单状态失败");
+					return map;
+				}
+				
+			} catch (Exception e) {
+				map.put("ret", -1);
+				map.put("msg", "程序出错，外协企业添加失败");
+				return map;
+			}
+			map.put("ret", 1);
+			map.put("msg", "外协企业添加成功");
+			return map;
+		}
 	}
+	
+		
 
 	@Override
 	public Map<String, Object> updateOutCompany(Out_company company) {

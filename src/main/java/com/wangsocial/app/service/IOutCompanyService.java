@@ -13,7 +13,7 @@ public interface IOutCompanyService extends IService<Out_company> {
 	 * @param plan
 	 * @return
 	 */
-	Map<String, Object> insertOutCompanyn(Out_company company);
+	Map<String, Object> insertOutCompanyn(Out_company company,String orderId,String orderName);
 
 	/**
 	 * 编辑外协
