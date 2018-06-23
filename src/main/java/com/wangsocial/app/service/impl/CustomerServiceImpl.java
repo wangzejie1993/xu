@@ -17,7 +17,6 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.wangsocial.app.entity.Customer;
 import com.wangsocial.app.entity.CustomerOrderReleation;
 import com.wangsocial.app.entity.Order;
-import com.wangsocial.app.entity.OrderProductionReleation;
 import com.wangsocial.app.mapper.CustomerMapper;
 import com.wangsocial.app.mapper.CustomerOrderReleationMapper;
 import com.wangsocial.app.mapper.OrderMapper;
@@ -72,7 +71,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 			map.put("ret", 1);
 			map.put("msg", "添加成功");
 			return map;
-		}else {
+		}else{
 			Map<String,Object> map = new HashMap<String, Object>();
 			if(StringUtils.isBlank(customer.getName()) || StringUtils.isBlank(customer.getPhone()) 
 					|| StringUtils.isBlank(customer.getCompany()) ||StringUtils.isBlank(customer.getAddress())){
@@ -95,7 +94,6 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 					return map;
 				}
 				
-				// 更新订单状态
 				Order order = new Order();
 				order.setId(orderId);
 				order.setOrderProcess("7");
@@ -105,8 +103,6 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 					map.put("msg", "更新订单状态失败");
 					return map;
 				}
-				
-				
 			}catch(Exception e){
 				map.put("ret", -1);
 				map.put("msg", "程序出错，添加客户失败");
@@ -115,7 +111,9 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 			map.put("ret", 1);
 			map.put("msg", "添加成功");
 			return map;
+			
 		}
+		
 		
 		
 	}

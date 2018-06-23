@@ -26,7 +26,6 @@ public class OutCompanyServiceImpl extends ServiceImpl<OutCompanyMapper, Out_com
 	
 	@Override
 	public Map<String, Object> insertOutCompanyn(Out_company company,String orderId,String orderName) {
-		
 		if (StringUtils.isBlank(orderId)
 				|| StringUtils.isBlank(orderName)) {
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -56,8 +55,8 @@ public class OutCompanyServiceImpl extends ServiceImpl<OutCompanyMapper, Out_com
 			map.put("ret", 1);
 			map.put("msg", "外协企业添加成功");
 			return map;
-		}
-		else {
+			
+		}else{
 			Map<String, Object> map = new HashMap<String, Object>();
 			if (StringUtils.isBlank(company.getName())
 					|| StringUtils.isBlank(company.getTaskId())
@@ -77,6 +76,7 @@ public class OutCompanyServiceImpl extends ServiceImpl<OutCompanyMapper, Out_com
 					map.put("msg", "外协企业添加失败");
 					return map;
 				}
+				
 				// 更新订单状态
 				Order order = new Order();
 				order.setId(orderId);
@@ -87,7 +87,6 @@ public class OutCompanyServiceImpl extends ServiceImpl<OutCompanyMapper, Out_com
 					map.put("msg", "更新订单状态失败");
 					return map;
 				}
-				
 			} catch (Exception e) {
 				map.put("ret", -1);
 				map.put("msg", "程序出错，外协企业添加失败");
@@ -97,9 +96,8 @@ public class OutCompanyServiceImpl extends ServiceImpl<OutCompanyMapper, Out_com
 			map.put("msg", "外协企业添加成功");
 			return map;
 		}
-	}
-	
 		
+	}
 
 	@Override
 	public Map<String, Object> updateOutCompany(Out_company company) {

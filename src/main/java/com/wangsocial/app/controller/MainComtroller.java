@@ -94,7 +94,6 @@ public class MainComtroller {
 	public String getOutCompany() {
 		return "OutCompany/index";
 	}
-	
 	@RequestMapping(value = "/OutCompany/add")
 	public String getOutCompanyAdd() {
 		return "OutCompany/add";
