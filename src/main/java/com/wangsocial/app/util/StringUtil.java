@@ -1,19 +1,13 @@
 package com.wangsocial.app.util;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.io.HTMLWriter;
-import org.dom4j.io.OutputFormat;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.beans.XMLDecoder;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
@@ -986,7 +980,7 @@ public class StringUtil {
      * 判断是否与给定字符串样式匹配
      * @param str 字符串
      * @param pattern 正则表达式样式
-     * @return 是否匹配是true,否false
+     * @return 是否匹配 是true,否false
      */
     public static boolean isMatch(String str, String pattern) {
         Pattern pattern_hand = Pattern.compile(pattern);
@@ -1498,17 +1492,17 @@ public class StringUtil {
      * @return
      * @throws Exception
      */
-    public static String formatHtml(String str) throws Exception {
-        Document document = null;
-        document = DocumentHelper.parseText(str);
-        OutputFormat format = OutputFormat.createPrettyPrint();
-        format.setEncoding("utf-8");
-        StringWriter writer = new StringWriter();
-        HTMLWriter htmlWriter = new HTMLWriter(writer, format);
-        htmlWriter.write(document);
-        htmlWriter.close();
-        return writer.toString();
-    }
+//    public static String formatHtml(String str) throws Exception {
+//        Document document = null;
+//        document = DocumentHelper.parseText(str);
+//        OutputFormat format = OutputFormat.createPrettyPrint();
+//        format.setEncoding("utf-8");
+//        StringWriter writer = new StringWriter();
+//        HTMLWriter htmlWriter = new HTMLWriter(writer, format);
+//        htmlWriter.write(document);
+//        htmlWriter.close();
+//        return writer.toString();
+//    }
 
     /**
      * 首字母大写
@@ -1723,6 +1717,609 @@ public class StringUtil {
             return "关键字中两个英文逗号不能相邻!";
         }
         return null;
+    }
+
+
+    /**
+     * 字节数组转16进制字符串
+     */
+    public static String bytes2HexString(byte[] b) {
+        String r = "";
+
+        for (int i = 0; i < b.length; i++) {
+            String hex = Integer.toHexString(b[i] & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            r += hex.toUpperCase();
+        }
+
+        return r;
+    }
+
+    /**
+     * 字符转换为字节
+     */
+    private static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
+    }
+
+    /**
+     * 16进制字符串转字节数组
+     */
+    public static byte[] hexString2Bytes(String hex) {
+
+        if ((hex == null) || (hex.equals(""))){
+            return null;
+        }
+        else if (hex.length()%2 != 0){
+            return null;
+        }
+        else{
+            hex = hex.toUpperCase();
+            int len = hex.length()/2;
+            byte[] b = new byte[len];
+            char[] hc = hex.toCharArray();
+            for (int i=0; i<len; i++){
+                int p=2*i;
+                b[i] = (byte) (charToByte(hc[p]) << 4 | charToByte(hc[p+1]));
+            }
+            return b;
+        }
+
+    }
+
+
+
+
+
+
+    /**
+     * 字节数组转字符串
+     */
+    public static String bytes2String(byte[] b) throws Exception {
+        String r = new String (b,"UTF-8");
+        return r;
+    }
+
+    /**
+     * 字符串转字节数组
+     */
+    public static byte[] string2Bytes(String s){
+        byte[] r = s.getBytes();
+        return r;
+    }
+
+    /**
+     * 16进制字符串转字符串
+     */
+    public static String hex2String(String hex) throws Exception{
+        String r = bytes2String(hexString2Bytes(hex));
+        return r;
+    }
+
+    /**
+     * 字符串转16进制字符串
+     */
+    public static String string2HexString(String s) throws Exception{
+        String r = bytes2HexString(string2Bytes(s));
+        return r;
+    }
+
+    /**
+     * 字节数组转16进制字符串
+     */
+    public static String byte2HexString(byte b) {
+        String r = "";
+        String hex = Integer.toHexString(b & 0xFF);
+        if (hex.length() == 1) {
+            hex = '0' + hex;
+        }
+        r = hex.toUpperCase();
+
+        return r;
+    }
+    /**
+     * 将16进制字符串转换为16进制byte
+     *
+     * @param str
+     * @return
+     */
+    public static byte hex2Bytes(String str) {
+        if(str == null || str.trim().equals("")) {
+            return Byte.parseByte(null);
+        }
+
+        if(Integer.parseInt(str,16)>=128){
+            byte v = Integer.valueOf(str, 16).byteValue();
+            return v;
+        }
+        Byte by = Byte.parseByte(str,16);
+
+        return by;
+    }
+
+    /**
+     * 整数10进制转16进制字符串
+     * @param a
+     * @return
+     */
+    public static String int2HexString(int a){
+        String r = "";
+        String hex = Integer.toHexString(a & 0xFF);
+        if (hex.length() == 1) {
+            hex = '0' + hex;
+        }
+        r = hex.toUpperCase();
+
+        return r;
+    }
+
+    /**
+     * 10进制转16进制byte
+     * @param a
+     * @return
+     */
+    public static byte int2byte(int a){
+        String hex = int2HexString(a);//16进制
+
+        return hex2Bytes(hex);
+
+
+    }
+    /**
+     * 获取strings字符串中所有str字符所在的下标
+     * @param strings 母字符串
+     * @param str 子字符串
+     * @return 字符串在母字符串中下标集合，如果母字符串中不包含子字符串，集合长度为零
+     */
+    public static List<Integer> getIndex(String strings, String str){
+        List<Integer> list=new ArrayList<>();
+        int flag=0;
+        while (strings.indexOf(str)!=-1){
+            //截取包含自身在内的前边部分
+            String aa= strings.substring(0,strings.indexOf(str)+str.length());
+            flag=flag+aa.length();
+            list.add(flag-str.length());
+            strings=strings.substring(strings.indexOf(str)+str.length());
+        }
+        return list;
+    }
+
+    /**
+     * 子字符串在父字符串中出现的次数
+     * @param str
+     * @param s
+     * @return
+     */
+    public static int countString(String str,String s) {
+        int count = 0;
+        while(str.indexOf(s) != -1){
+
+            str = str.substring(str.indexOf(s)+1,str.length());
+            count++;
+
+        }
+        System.out.println(s+"出现的次数为"+count+"次");
+        return count;
+    }
+
+
+    /**
+     * 子字符串在父字符串中出现
+     * @param obj1
+     * @param Obj2
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public static <T> Map<String, String> compare(T obj1, T Obj2)
+            throws Exception {
+
+        Map<String, String> result = new HashMap<String, String>();
+
+        Field[] fs = obj1.getClass().getDeclaredFields();//获取所有属性
+        for (Field f : fs) {
+            f.setAccessible(true);//设置访问性，反射类的方法，设置为true就可以访问private修饰的东西，否则无法访问
+            Object v1 = f.get(obj1);
+            Object v2 = f.get(Obj2);
+            result.put(f.getName(), String.valueOf(equals(v1, v2)));
+        }
+        return result;
+    }
+
+    public static boolean equals(Object obj1, Object obj2) {
+
+        if (obj1 == obj2) {
+            return true;
+        }
+        if (obj1 == null || obj2 == null) {
+            return false;
+        }
+        return obj1.equals(obj2);
+    }
+
+    /**
+     * 子字符串在父字符串中出现的次数
+     * 反射
+     * @param obj1
+     * @param obj2
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public static <T> boolean ObjectCompare(T obj1,T obj2) throws Exception{
+        Field[] fs = obj1.getClass().getDeclaredFields();//获取所有属性
+        for (Field field:fs) {
+            field.setAccessible(true);//设置访问性，反射类方法，设置为true可以访问private修饰符修饰的，否则无法访问
+            Object v1 = field.get(obj1);
+            Object v2 = field.get(obj2);
+            if (v1!=v2){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
+    /**
+     * CRC16-XMODEM算法（四字节）
+     * @param bytes
+     * @return
+     */
+    public static int crc16_ccitt_xmodem(byte[] bytes) {
+        return crc16_ccitt_xmodem(bytes,0,bytes.length);
+    }
+
+    /**
+     * CRC16-XMODEM算法（四字节）
+     * @param bytes
+     * @param offset
+     * @param count
+     * @return
+     */
+    public static int crc16_ccitt_xmodem(byte[] bytes,int offset,int count) {
+        int crc = 0x0000; // initial value
+        int polynomial = 0x1021; // poly value
+        for (int index = offset; index < count; index++) {
+            byte b = bytes[index];
+            for (int i = 0; i < 8; i++) {
+                boolean bit = ((b >> (7 - i) & 1) == 1);
+                boolean c15 = ((crc >> 15 & 1) == 1);
+                crc <<= 1;
+                if (c15 ^ bit)
+                    crc ^= polynomial;
+            }
+        }
+        crc &= 0xffff;
+        return crc;
+    }
+
+    /**
+     * CRC16-XMODEM算法（两字节）
+     * @param bytes
+     * @param offset
+     * @param count
+     * @return
+     */
+    public static short crc16_ccitt_xmodem_short(byte[] bytes,int offset,int count) {
+        return (short)crc16_ccitt_xmodem(bytes,offset,count);
+    }
+    /**
+     * CRC16-XMODEM算法（两字节）
+     * @param bytes
+     * @return
+     */
+    public static short crc16_ccitt_xmodem_short(byte[] bytes) {
+        return crc16_ccitt_xmodem_short(bytes,0,bytes.length);
+    }
+
+
+    /**
+     * 每一行读取文件数据
+     * @param fileName
+     */
+    public static void readFileByLines(String fileName) {
+
+               File file = new File(fileName);
+
+               BufferedReader reader = null;
+
+                try {
+
+                         System.out.println("以行为单位读取文件内容，一次读一整行：");
+
+                       reader = new BufferedReader(new FileReader(file));
+
+                      String tempString = null;
+
+                        int line = 1;
+
+                      // 一次读入一行，直到读入null为文件结束
+
+                      while ((tempString = reader.readLine()) != null) {
+
+                               // 显示行号
+
+                               System.out.println("line " + line + ": " + tempString);
+
+                                 line++;
+
+                             }
+
+                         reader.close();
+
+                     } catch (IOException e) {
+
+                        e.printStackTrace();
+
+                   } finally {
+
+                        if (reader != null) {
+
+                                 try {
+
+                                        reader.close();
+
+                                    } catch (IOException e1) {
+
+                                   }
+
+                          }
+
+                   }
+
+           }
+
+    /**
+     * byte 数组合并
+     * @param b1
+     * @param b2
+     * @return
+     */
+    public static byte[] byteMeger(byte[] b1,byte[] b2,byte[] b3){
+                byte[] result = new byte[b1.length+b2.length+b3.length];
+                System.arraycopy(b1,0,result,0,b1.length);
+                System.arraycopy(b2,0,result,b1.length,b2.length);
+                System.arraycopy(b3,0,result,b1.length+b2.length,b3.length);
+
+                return result;
+           }
+
+    private static int checkAll(byte arr[]) {
+        int len = arr.length;
+        int sum = 0;
+        if(len == 1) {
+            return arr[0];
+        }else {
+            for (int i = 0; i < len; i++) {
+                sum+=arr[i];
+            }
+            return sum;
+        }
+    }
+    //        //头（AA）+ 命令（model）+ 数据（data）+长度（len）+校验和（sum）+尾（0d 0b）
+    //        0xaa,0x00,0x00, 0x01,0x01, 0x0d ,0x0b
+    public static byte[]  searchPackage(byte model,byte[] data,byte len){
+        byte[] command_buff = new byte[data.length+6];
+        byte[] head = new byte[2];
+        head[0] = (byte)0XAA;//HEADER
+        head[1] = (byte)model;//model
+
+        byte[] mid = new byte[head.length+data.length];
+        System.arraycopy(head,0,mid,0,head.length);
+        System.arraycopy(data,0,mid,head.length,data.length);
+
+        int te = checkAll(mid);
+        int count=( te&0xff)+(len & 0xff) -170;
+        byte[] end = new byte[4];
+        end[0] = (byte)len;//len
+        end[1] = (byte)StringUtil.int2byte(count);//校验和
+        end[2] = (byte)0x0d;//0d
+        end[3] = (byte)0x0b;//0b
+
+        System.arraycopy(mid,0,command_buff,0,mid.length);
+        System.arraycopy(end,0,command_buff,mid.length,end.length);
+        return command_buff;
+//
+
+    }
+
+    public static boolean getFlag(String data){
+        List<Boolean> list = new ArrayList<>();
+        String[] str = data.split("AA");
+        if (str.length!=5){
+            return false;
+        }
+        for (int i = 1; i < str.length; i++) {
+            String tt = str[i];
+            char[] chars =tt.toCharArray();
+            if ('2' == chars[7]){
+                list.add(true);
+            }
+        }
+        if (list.size()==4){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param data
+     * @return
+     */
+    public static boolean getBoolean(String data){
+        String[] str = data.split("AA");
+        System.out.println("接收到的返回值数据长度"+str.length);
+        if (str.length!=5){
+            return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) throws Exception {
+        //14个2c
+//        String str = "2447504747412c2c2c2c2c2c302c2c2c2c2c2c2c2c2a3636da";
+//        byte[] by = new byte[]{0x03};
+//        System.out.println("args = [" + bytes2HexString(by) + "]");
+
+//        CanInfo canInfo = new CanInfo();
+//        CanInfo canInfo1 = new CanInfo();
+//        canInfo.setId(1);
+//        canInfo.setCadence(2);
+//        canInfo1.setId(2);
+//        canInfo1.setCadence(2);
+//
+//        Map result = compare(canInfo,canInfo1);
+//        System.out.println("args = [" + result + "]");
+
+//        byte[] bytes = {0x31,0x32,0x33,0x34};
+//
+//        int a =   crc16_ccitt_xmodem(bytes);
+//        System.out.println("args = [" + Integer.toString(a,16) + "]");
+
+//        String name = "STM32.Bin";
+//        byte[] bytes = name.getBytes();
+//        byte[] by = new byte[12];
+//
+//        List list = new ArrayList();
+//
+//
+//        for (int i = 0; i < bytes.length; i++) {
+//            System.out.println("args = [" + bytes[i] + "]");
+//        }
+//        String temp = bytes2HexString(bytes);
+//        System.out.println("args = [" + bytes + "]");
+//
+//        int a = 2700;
+//
+//       String aa = String.valueOf(a);
+//       byte[] ida = aa.getBytes();
+//        for (int i = 0; i < ida.length; i++) {
+//            System.out.println("args = [" + ida[i] + "]");
+//        }
+
+        System.out.println(-1&0xff);
+
+        int seq = 0;
+        int offset = 0;
+        byte[] nameBuffer = new byte[12];
+        byte[] sizeBuffer = new byte[8];
+        byte[] offsetBuffer = new byte[8];
+
+
+        for (int i = 0; i < 8; i++) {
+            offsetBuffer[i] = 0;
+        }
+        int size = 270000;
+        String temp = String.valueOf(size);
+        int sizeT = temp.length();
+        int val = 8-sizeT;
+        //根据val 0填充
+        for (int i = 0; i < val; i++) {
+            sizeBuffer[i] = 0;
+        }
+
+        byte[] sizeV = temp.getBytes();
+        int bb = 0;
+        for (int i = val; i <8 ; i++) {
+            sizeBuffer[i]= sizeV[bb];
+            bb++;
+        }
+
+       String name = "STM32.Bin";
+        byte[] bytes = name.getBytes();
+        int tp = 0;
+        for (int i = 3; i < nameBuffer.length; i++) {
+            nameBuffer[i] = bytes[tp];
+            tp++;
+        }
+        //nameBuffer + sizeBuffer + offsetBuffer)
+        // 合并三个数组
+        byte[] fileHeadBuffer = new byte[nameBuffer.length + sizeBuffer.length + offsetBuffer.length];
+        System.arraycopy(nameBuffer, 0, fileHeadBuffer, 0, nameBuffer.length);
+        System.arraycopy(sizeBuffer, 0, fileHeadBuffer, nameBuffer.length, sizeBuffer.length);
+        System.arraycopy(offsetBuffer, 0, fileHeadBuffer, nameBuffer.length + sizeBuffer.length, offsetBuffer.length);
+
+        byte[] data = new byte[128];
+        System.arraycopy(fileHeadBuffer,0,data,0,fileHeadBuffer.length);
+
+
+//        for (int i = 0; i < data.length; i++) {
+//           System.out.print( data[i]);
+//        }
+
+
+
+        int seqchr=  seq & 0xff;
+        int seqchrNeg = (-seq-1) & 0xff;
+
+
+
+        int crc16 =  crc16_ccitt_xmodem(data);//crc16十进制
+        //System.out.println("args = [" + crc16 + "]");
+        String toHexstr = Integer.toHexString(crc16);//转换成16进制字符串
+        if (toHexstr.length() == 1) {
+            toHexstr = "000" + toHexstr;
+        } else if (toHexstr.length() == 2) {
+            toHexstr = "00" + toHexstr;
+        } else if (toHexstr.length() == 3) {
+            toHexstr = "0" + toHexstr;
+        }
+
+        String fhex = toHexstr.substring(0,2);
+        String lhex =toHexstr.substring(2,toHexstr.length());
+
+        int intCrc = Integer.parseInt(fhex,16);
+        int intCrcLast = Integer.parseInt(lhex,16);
+
+        byte[] crc = new byte[2];
+        crc[0] =(byte)intCrc;
+        crc[1] =(byte)intCrcLast;
+
+        byte[] packetBuf = new byte[]{0x01, 0x00, (byte) 0xff};
+        byte[] result = new byte[packetBuf.length+data.length+crc.length];
+
+
+        //let packetBuf = Buffer.concat([Buffer.from([Y_MODEM.PACKET_MARK]), seqchr, seqchrNeg, dataBuffer, Buffer(crc16, 'hex')]);
+        System.arraycopy(packetBuf,0,result,0,packetBuf.length);
+        System.arraycopy(fileHeadBuffer,0,result,packetBuf.length,fileHeadBuffer.length);
+
+        result[result.length-2] = crc[0];
+        result[result.length-1] = crc[1];
+        for (int i = 0; i < result.length; i++) {
+            //System.out.print( (result[i] & 0xff) );
+        }
+
+       String str = bytes2HexString(result);
+        //System.out.println("args = [" + str + "]");
+
+       // System.out.println("args = [" + big + "]");
+
+        int a = 0x20;
+        a = a>>8;
+        //System.out.println("args = [" + a + "]");
+
+
+        byte[] target = new byte[]{0x05,0x06};
+
+        byte[] bt1 = {(byte) 0xAA, 0x0C, 0x05};
+        byte[] bt2 = {(byte) 0x01, 0X20, 0X00, 0x08};
+        byte[] byteReadHead = StringUtil.byteMeger(bt1,target,bt2);
+
+        for (int i = 0; i < byteReadHead.length; i++) {
+//            System.out.println("args = [" + byteReadHead[i] + "]");
+        }
+
+        //byte bbt = int2byte(140);
+        //Byte by = Byte.parseByte("8C");
+        //Integer.parseInt("0x8C", 16)
+
+        byte v = Integer.valueOf("8C", 16).byteValue();
+        System.out.println("args = [" +  hex2Bytes("00") + "]");
     }
 
 }

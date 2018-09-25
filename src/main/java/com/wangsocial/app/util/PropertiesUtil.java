@@ -1,8 +1,5 @@
 package com.wangsocial.app.util;
 
-import com.wangsocial.app.common.exception.BusinessException;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +23,7 @@ public class PropertiesUtil {
                 }
             }
         } catch (Exception e) {
-            throw new BusinessException("读取配置文件错误！");
+            e.printStackTrace();
         }
     }
 
